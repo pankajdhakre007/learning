@@ -6,36 +6,37 @@
   <title>Technology Benchmarks — Throughput & Latency — Learning Docs</title>
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body class="tech-comparison-page">
+<body class="page-comparison">
   <main class="page-shell">
     <header class="site-header">
       <div class="brand">
+        <p class="eyebrow">Infrastructure Benchmarks</p>
         <h1 class="brand-title">Technology Benchmarks</h1>
         <p class="brand-subtitle">Reads/sec, writes/sec, and latency ranges across databases, caches, message queues, gateways, and related infrastructure.</p>
       </div>
-      <a class="button button-icon" href="index.html" aria-label="Back to home" title="Back to home">
+      <a class="button button--icon" href="index.html" aria-label="Back to home" title="Back to home">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </a>
     </header>
 
-    <div class="page-layout">
-      <section class="legend-section">
+    <div class="split-layout">
+      <section class="panel panel--sticky">
       <h2>Color Legend</h2>
       <div class="legend-grid">
         <div class="legend-category">
           <h3>Latency Ranges</h3>
           <div class="legend-item">
-            <div class="legend-color is-low"></div>
+            <div class="swatch swatch--success"></div>
             <span class="legend-text"><strong>Low:</strong> 0.1–10 ms (excellent)</span>
           </div>
           <div class="legend-item">
-            <div class="legend-color is-medium"></div>
+            <div class="swatch swatch--warn"></div>
             <span class="legend-text"><strong>Medium:</strong> 10–100 ms (acceptable)</span>
           </div>
           <div class="legend-item">
-            <div class="legend-color is-high"></div>
+            <div class="swatch swatch--danger"></div>
             <span class="legend-text"><strong>High:</strong> 100+ ms (batch/stream)</span>
           </div>
         </div>
@@ -43,26 +44,26 @@
         <div class="legend-category">
           <h3>Throughput Ranges</h3>
           <div class="legend-item">
-            <div class="legend-color is-excellent"></div>
+            <div class="swatch swatch--success"></div>
             <span class="legend-text"><strong>Excellent:</strong> 100K+ ops/sec</span>
           </div>
           <div class="legend-item">
-            <div class="legend-color is-good"></div>
+            <div class="swatch swatch--warn"></div>
             <span class="legend-text"><strong>Good:</strong> 10K–100K ops/sec</span>
           </div>
           <div class="legend-item">
-            <div class="legend-color is-moderate"></div>
+            <div class="swatch swatch--danger"></div>
             <span class="legend-text"><strong>Moderate:</strong> 1K–10K ops/sec</span>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="comparison-grid">
+    <div class="card-grid card-grid--stack">
       <!-- Core Systems -->
-      <section class="tech-section">
+      <section class="panel">
         <h2>Core Systems</h2>
-        <table class="comparison-table">
+        <table class="data-table data-table--bordered">
           <thead>
             <tr>
               <th>Technology</th>
@@ -74,69 +75,69 @@
           </thead>
           <tbody>
             <tr>
-              <td class="tech-name">Redis</td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="latency-low">0.1–0.5 ms</span></td>
-              <td><span class="latency-low">0.1–0.7 ms</span></td>
+              <td class="text-strong">Redis</td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">0.1–0.5 ms</span></td>
+              <td><span class="text-success">0.1–0.7 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Elasticsearch</td>
-              <td><span class="throughput-moderate">5K – 50K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">5–50 ms</span></td>
-              <td><span class="latency-medium">10–100 ms</span></td>
+              <td class="text-strong">Elasticsearch</td>
+              <td><span class="text-danger">5K – 50K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">5–50 ms</span></td>
+              <td><span class="text-warn">10–100 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Kafka</td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
-              <td><span class="latency-low">2–10 ms</span></td>
+              <td class="text-strong">Kafka</td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
+              <td><span class="text-success">2–10 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Cassandra</td>
-              <td><span class="throughput-excellent">50K – 500K</span></td>
-              <td><span class="throughput-good">20K – 200K</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
-              <td><span class="latency-low">2–10 ms</span></td>
+              <td class="text-strong">Cassandra</td>
+              <td><span class="text-success">50K – 500K</span></td>
+              <td><span class="text-warn">20K – 200K</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
+              <td><span class="text-success">2–10 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">DynamoDB</td>
-              <td><span class="throughput-excellent">100K – millions+</span></td>
-              <td><span class="throughput-excellent">100K – millions+</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
+              <td class="text-strong">DynamoDB</td>
+              <td><span class="text-success">100K – millions+</span></td>
+              <td><span class="text-success">100K – millions+</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">PostgreSQL</td>
-              <td><span class="throughput-moderate">5K – 50K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
-              <td><span class="latency-medium">2–20 ms</span></td>
+              <td class="text-strong">PostgreSQL</td>
+              <td><span class="text-danger">5K – 50K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
+              <td><span class="text-warn">2–20 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Flink</td>
-              <td><span class="throughput-excellent">100K – 10M+</span></td>
-              <td><span class="throughput-excellent">100K – 10M+</span></td>
-              <td><span class="latency-high">10–1000 ms</span></td>
-              <td><span class="latency-high">10–1000 ms</span></td>
+              <td class="text-strong">Flink</td>
+              <td><span class="text-success">100K – 10M+</span></td>
+              <td><span class="text-success">100K – 10M+</span></td>
+              <td><span class="text-danger">10–1000 ms</span></td>
+              <td><span class="text-danger">10–1000 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">ZooKeeper</td>
-              <td><span class="throughput-moderate">1K – 10K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
+              <td class="text-strong">ZooKeeper</td>
+              <td><span class="text-danger">1K – 10K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <!-- API Gateways -->
-      <section class="tech-section">
+      <section class="panel">
         <h2>API Gateways</h2>
-        <table class="comparison-table">
+        <table class="data-table data-table--bordered">
           <thead>
             <tr>
               <th>Technology</th>
@@ -148,34 +149,34 @@
           </thead>
           <tbody>
             <tr>
-              <td class="tech-name">Amazon API Gateway</td>
-              <td><span class="throughput-good">10K – 100K+</span></td>
-              <td><span class="throughput-good">10K – 100K+</span></td>
-              <td><span class="latency-medium">10–50 ms</span></td>
-              <td><span class="latency-medium">10–50 ms</span></td>
+              <td class="text-strong">Amazon API Gateway</td>
+              <td><span class="text-warn">10K – 100K+</span></td>
+              <td><span class="text-warn">10K – 100K+</span></td>
+              <td><span class="text-warn">10–50 ms</span></td>
+              <td><span class="text-warn">10–50 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Kong</td>
-              <td><span class="throughput-excellent">20K – 200K</span></td>
-              <td><span class="throughput-excellent">20K – 200K</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
-              <td><span class="latency-low">1–10 ms</span></td>
+              <td class="text-strong">Kong</td>
+              <td><span class="text-success">20K – 200K</span></td>
+              <td><span class="text-success">20K – 200K</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
+              <td><span class="text-success">1–10 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">NGINX</td>
-              <td><span class="throughput-excellent">50K – 500K+</span></td>
-              <td><span class="throughput-excellent">50K – 500K+</span></td>
-              <td><span class="latency-low">0.5–5 ms</span></td>
-              <td><span class="latency-low">0.5–5 ms</span></td>
+              <td class="text-strong">NGINX</td>
+              <td><span class="text-success">50K – 500K+</span></td>
+              <td><span class="text-success">50K – 500K+</span></td>
+              <td><span class="text-success">0.5–5 ms</span></td>
+              <td><span class="text-success">0.5–5 ms</span></td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <!-- Load Balancers -->
-      <section class="tech-section">
+      <section class="panel">
         <h2>Load Balancers</h2>
-        <table class="comparison-table">
+        <table class="data-table data-table--bordered">
           <thead>
             <tr>
               <th>Technology</th>
@@ -187,34 +188,34 @@
           </thead>
           <tbody>
             <tr>
-              <td class="tech-name">HAProxy</td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="latency-low">0.2–2 ms</span></td>
-              <td><span class="latency-low">0.2–2 ms</span></td>
+              <td class="text-strong">HAProxy</td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">0.2–2 ms</span></td>
+              <td><span class="text-success">0.2–2 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">NGINX</td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="latency-low">0.5–5 ms</span></td>
-              <td><span class="latency-low">0.5–5 ms</span></td>
+              <td class="text-strong">NGINX</td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">0.5–5 ms</span></td>
+              <td><span class="text-success">0.5–5 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">AWS ELB</td>
-              <td><span class="throughput-excellent">100K – millions+</span></td>
-              <td><span class="throughput-excellent">100K – millions+</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
+              <td class="text-strong">AWS ELB</td>
+              <td><span class="text-success">100K – millions+</span></td>
+              <td><span class="text-success">100K – millions+</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <!-- Time Series Databases -->
-      <section class="tech-section">
+      <section class="panel">
         <h2>Time Series Databases</h2>
-        <table class="comparison-table">
+        <table class="data-table data-table--bordered">
           <thead>
             <tr>
               <th>Technology</th>
@@ -226,34 +227,34 @@
           </thead>
           <tbody>
             <tr>
-              <td class="tech-name">InfluxDB</td>
-              <td><span class="throughput-excellent">50K – 500K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">5–50 ms</span></td>
-              <td><span class="latency-low">2–10 ms</span></td>
+              <td class="text-strong">InfluxDB</td>
+              <td><span class="text-success">50K – 500K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">5–50 ms</span></td>
+              <td><span class="text-success">2–10 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">TimescaleDB</td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
-              <td><span class="latency-medium">5–20 ms</span></td>
+              <td class="text-strong">TimescaleDB</td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
+              <td><span class="text-warn">5–20 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Prometheus</td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">5–50 ms</span></td>
-              <td><span class="latency-medium">5–50 ms</span></td>
+              <td class="text-strong">Prometheus</td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">5–50 ms</span></td>
+              <td><span class="text-warn">5–50 ms</span></td>
             </tr>
           </tbody>
         </table>
       </section>
 
       <!-- Vector Databases -->
-      <section class="tech-section">
+      <section class="panel">
         <h2>Vector Databases</h2>
-        <table class="comparison-table">
+        <table class="data-table data-table--bordered">
           <thead>
             <tr>
               <th>Technology</th>
@@ -265,32 +266,32 @@
           </thead>
           <tbody>
             <tr>
-              <td class="tech-name">Pinecone</td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">10–100 ms</span></td>
-              <td><span class="latency-medium">10–50 ms</span></td>
+              <td class="text-strong">Pinecone</td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">10–100 ms</span></td>
+              <td><span class="text-warn">10–50 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Weaviate</td>
-              <td><span class="throughput-moderate">5K – 50K</span></td>
-              <td><span class="throughput-moderate">5K – 50K</span></td>
-              <td><span class="latency-medium">10–100 ms</span></td>
-              <td><span class="latency-medium">10–50 ms</span></td>
+              <td class="text-strong">Weaviate</td>
+              <td><span class="text-danger">5K – 50K</span></td>
+              <td><span class="text-danger">5K – 50K</span></td>
+              <td><span class="text-warn">10–100 ms</span></td>
+              <td><span class="text-warn">10–50 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">Milvus</td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="throughput-good">10K – 100K</span></td>
-              <td><span class="latency-medium">5–50 ms</span></td>
-              <td><span class="latency-low">5–20 ms</span></td>
+              <td class="text-strong">Milvus</td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">10K – 100K</span></td>
+              <td><span class="text-warn">5–50 ms</span></td>
+              <td><span class="text-success">5–20 ms</span></td>
             </tr>
             <tr>
-              <td class="tech-name">FAISS</td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="throughput-excellent">100K – 1M+</span></td>
-              <td><span class="latency-low">0.1–5 ms</span></td>
-              <td><span class="latency-low">0.1–5 ms</span></td>
+              <td class="text-strong">FAISS</td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">100K – 1M+</span></td>
+              <td><span class="text-success">0.1–5 ms</span></td>
+              <td><span class="text-success">0.1–5 ms</span></td>
             </tr>
           </tbody>
         </table>
@@ -331,7 +332,7 @@
     }
 
     function initSortableTables() {
-      const tables = document.querySelectorAll('.comparison-table');
+      const tables = document.querySelectorAll('.data-table--bordered');
       
       tables.forEach(table => {
         const headers = table.querySelectorAll('th');
@@ -341,7 +342,7 @@
         headers[0].classList.add('sort-asc');
         
         headers.forEach((header, index) => {
-          header.classList.add('sortable');
+          header.classList.add('is-sortable');
           let sortDirection = 'asc';
           
           header.addEventListener('click', () => {

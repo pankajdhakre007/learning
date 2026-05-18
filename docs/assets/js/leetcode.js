@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const content = document.getElementById('content');
-    const chips = document.querySelectorAll('.filter-chip');
+    const chips = document.querySelectorAll('.chip--filter');
     const searchInput = document.getElementById('searchInput');
     const totals = {
         count: document.getElementById('questionCount'),
@@ -141,15 +141,15 @@ document.addEventListener('DOMContentLoaded', () => {
             hard += filtered.filter(([, difficulty]) => difficulty === 'Hard').length;
 
             const section = document.createElement('div');
-            section.className = 'category-section';
+            section.className = 'section';
             section.id = slugify(category);
 
             section.innerHTML = `
         <div class="category-header">
-          <h2>${category}</h2>
-          <span class="question-count">${filtered.length} Questions</span>
+          <h2 class="panel-title panel-title--sm">${category}</h2>
+          <span class="text-secondary">${filtered.length} Questions</span>
         </div>
-        <table>
+        <table class="data-table">
           <thead>
             <tr>
               <th>#</th>
@@ -163,13 +163,14 @@ document.addEventListener('DOMContentLoaded', () => {
             ${filtered.map((problem, index) => {
                 const [title, difficulty, reason, url] = problem;
                 const label = url.includes('leetcode') ? 'LeetCode' : url.includes('geeksforgeeks') ? 'GeeksForGeeks' : 'Open Link';
+                const chipTone = difficulty === 'Hard' ? 'chip--danger' : difficulty === 'Medium' ? 'chip--warn' : 'chip--success';
                 return `
                 <tr>
                   <td>${index + 1}</td>
                   <td><strong>${title}</strong></td>
-                  <td><span class="badge ${difficulty.toLowerCase()}">${difficulty}</span></td>
+                  <td><span class="chip ${chipTone}">${difficulty}</span></td>
                   <td>${reason}</td>
-                  <td><a class="open-btn" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></td>
+                  <td><a class="button" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></td>
                 </tr>
               `;
             }).join('')}
@@ -187,8 +188,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     chips.forEach(chip => {
         chip.addEventListener('click', () => {
-            chips.forEach(node => node.classList.remove('active'));
-            chip.classList.add('active');
+            chips.forEach(node => node.classList.remove('is-active'));
+            chip.classList.add('is-active');
             selectedDifficulty = chip.dataset.difficulty;
             render();
         });

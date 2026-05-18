@@ -8,98 +8,95 @@
 </head>
 <body class="tech-issues-shell">
   <div class="tech-container">
-    <header class="tech-header">
+    <header class="site-header">
       <div class="brand">
         <p class="eyebrow">Technology Deep-Dives</p>
-        <h1>Production Issues &amp; Resolutions</h1>
+        <h1 class="brand-title">Production Issues &amp; Resolutions</h1>
         <p class="brand-subtitle">Twenty-eight failure domains across Kafka, MongoDB, Redis, Cassandra, Kubernetes, Elasticsearch, and API Gateway.</p>
       </div>
-      <a class="button button-icon" href="index.html" aria-label="Back to home" title="Back to home">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+      <a class="button button--icon" href="index.html" aria-label="Back to home" title="Back to home">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </a>
     </header>
-    
-    <aside class="tech-sidebar">
-      <div class="sidebar-section">
-        <div class="sidebar-title">All Topics</div>
-        <div id="navList" class="tech-groups">
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">Kafka</span><span class="tech-group-pill">Messaging</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="kafka-throughput.html" data-category="Messaging"><span class="nav-item-title">Throughput imbalance</span></a></li>
-              <li><a href="#" data-page="kafka-coordination.html" data-category="Messaging"><span class="nav-item-title">Cluster coordination instability</span></a></li>
-              <li><a href="#" data-page="kafka-storage.html" data-category="Messaging"><span class="nav-item-title">Storage and replication pressure</span></a></li>
-              <li><a href="#" data-page="kafka-partition.html" data-category="Messaging"><span class="nav-item-title">Partitioning and data distribution issues</span></a></li>
-            </ul>
-          </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">MongoDB</span><span class="tech-group-pill">Database</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="mongodb-query.html" data-category="Database"><span class="nav-item-title">Query performance degradation</span></a></li>
-              <li><a href="#" data-page="mongodb-replication.html" data-category="Database"><span class="nav-item-title">Replication and consistency delays</span></a></li>
-              <li><a href="#" data-page="mongodb-distribution.html" data-category="Database"><span class="nav-item-title">Data distribution imbalance</span></a></li>
-              <li><a href="#" data-page="mongodb-resources.html" data-category="Database"><span class="nav-item-title">Resource saturation</span></a></li>
-            </ul>
-          </div>
+    <aside class="tech-aside">
+      <p class="label-mono">All Topics</p>
+      <div id="navList">
+        <div class="nav-group">
+          <div class="nav-group-header"><span>Kafka</span><span class="chip chip--ghost">Messaging</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="kafka-throughput.html" data-category="Messaging">Throughput imbalance</a></li>
+            <li><a href="#" data-page="kafka-coordination.html" data-category="Messaging">Cluster coordination instability</a></li>
+            <li><a href="#" data-page="kafka-storage.html" data-category="Messaging">Storage and replication pressure</a></li>
+            <li><a href="#" data-page="kafka-partition.html" data-category="Messaging">Partitioning and data distribution issues</a></li>
+          </ul>
+        </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">Redis</span><span class="tech-group-pill">Cache</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="redis-memory.html" data-category="Cache"><span class="nav-item-title">Memory pressure</span></a></li>
-              <li><a href="#" data-page="redis-access.html" data-category="Cache"><span class="nav-item-title">Data access imbalance</span></a></li>
-              <li><a href="#" data-page="redis-replication.html" data-category="Cache"><span class="nav-item-title">Replication and persistence delays</span></a></li>
-              <li><a href="#" data-page="redis-latency.html" data-category="Cache"><span class="nav-item-title">Latency and blocking operations</span></a></li>
-            </ul>
-          </div>
+        <div class="nav-group">
+          <div class="nav-group-header"><span>MongoDB</span><span class="chip chip--ghost">Database</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="mongodb-query.html" data-category="Database">Query performance degradation</a></li>
+            <li><a href="#" data-page="mongodb-replication.html" data-category="Database">Replication and consistency delays</a></li>
+            <li><a href="#" data-page="mongodb-distribution.html" data-category="Database">Data distribution imbalance</a></li>
+            <li><a href="#" data-page="mongodb-resources.html" data-category="Database">Resource saturation</a></li>
+          </ul>
+        </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">Cassandra</span><span class="tech-group-pill">Database</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="cassandra-distribution.html" data-category="Database"><span class="nav-item-title">Data distribution imbalance</span></a></li>
-              <li><a href="#" data-page="cassandra-compaction.html" data-category="Database"><span class="nav-item-title">Storage and compaction pressure</span></a></li>
-              <li><a href="#" data-page="cassandra-consistency.html" data-category="Database"><span class="nav-item-title">Consistency and repair problems</span></a></li>
-              <li><a href="#" data-page="cassandra-tombstones.html" data-category="Database"><span class="nav-item-title">Read amplification and tombstones</span></a></li>
-            </ul>
-          </div>
+        <div class="nav-group">
+          <div class="nav-group-header"><span>Redis</span><span class="chip chip--ghost">Cache</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="redis-memory.html" data-category="Cache">Memory pressure</a></li>
+            <li><a href="#" data-page="redis-access.html" data-category="Cache">Data access imbalance</a></li>
+            <li><a href="#" data-page="redis-replication.html" data-category="Cache">Replication and persistence delays</a></li>
+            <li><a href="#" data-page="redis-latency.html" data-category="Cache">Latency and blocking operations</a></li>
+          </ul>
+        </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">Kubernetes</span><span class="tech-group-pill">Orchestration</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="kubernetes-resources.html" data-category="Orchestration"><span class="nav-item-title">Resource exhaustion</span></a></li>
-              <li><a href="#" data-page="kubernetes-scheduling.html" data-category="Orchestration"><span class="nav-item-title">Scheduling and placement failures</span></a></li>
-              <li><a href="#" data-page="kubernetes-lifecycle.html" data-category="Orchestration"><span class="nav-item-title">Application lifecycle instability</span></a></li>
-              <li><a href="#" data-page="kubernetes-networking.html" data-category="Orchestration"><span class="nav-item-title">Cluster networking problems</span></a></li>
-            </ul>
-          </div>
+        <div class="nav-group">
+          <div class="nav-group-header"><span>Cassandra</span><span class="chip chip--ghost">Database</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="cassandra-distribution.html" data-category="Database">Data distribution imbalance</a></li>
+            <li><a href="#" data-page="cassandra-compaction.html" data-category="Database">Storage and compaction pressure</a></li>
+            <li><a href="#" data-page="cassandra-consistency.html" data-category="Database">Consistency and repair problems</a></li>
+            <li><a href="#" data-page="cassandra-tombstones.html" data-category="Database">Read amplification and tombstones</a></li>
+          </ul>
+        </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">API Gateway</span><span class="tech-group-pill">Gateway</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="api-gateway-traffic.html" data-category="Gateway"><span class="nav-item-title">Traffic management and overload</span></a></li>
-              <li><a href="#" data-page="api-gateway-auth.html" data-category="Gateway"><span class="nav-item-title">Authentication and authorization failures</span></a></li>
-              <li><a href="#" data-page="api-gateway-upstream.html" data-category="Gateway"><span class="nav-item-title">Upstream dependency instability</span></a></li>
-              <li><a href="#" data-page="api-gateway-connections.html" data-category="Gateway"><span class="nav-item-title">Connection and resource exhaustion</span></a></li>
-            </ul>
-          </div>
+        <div class="nav-group">
+          <div class="nav-group-header"><span>Kubernetes</span><span class="chip chip--ghost">Orchestration</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="kubernetes-resources.html" data-category="Orchestration">Resource exhaustion</a></li>
+            <li><a href="#" data-page="kubernetes-scheduling.html" data-category="Orchestration">Scheduling and placement failures</a></li>
+            <li><a href="#" data-page="kubernetes-lifecycle.html" data-category="Orchestration">Application lifecycle instability</a></li>
+            <li><a href="#" data-page="kubernetes-networking.html" data-category="Orchestration">Cluster networking problems</a></li>
+          </ul>
+        </div>
 
-          <div class="tech-group">
-            <div class="tech-group-summary"><span class="tech-group-title">Elasticsearch</span><span class="tech-group-pill">Search</span></div>
-            <ul class="nav-list">
-              <li><a href="#" data-page="elasticsearch-query.html" data-category="Search"><span class="nav-item-title">Query execution pressure</span></a></li>
-              <li><a href="#" data-page="elasticsearch-memory.html" data-category="Search"><span class="nav-item-title">Heap and memory pressure</span></a></li>
-              <li><a href="#" data-page="elasticsearch-shards.html" data-category="Search"><span class="nav-item-title">Shard distribution imbalance</span></a></li>
-              <li><a href="#" data-page="elasticsearch-indexing.html" data-category="Search"><span class="nav-item-title">Indexing and merge backpressure</span></a></li>
-            </ul>
-          </div>
+        <div class="nav-group">
+          <div class="nav-group-header"><span>API Gateway</span><span class="chip chip--ghost">Gateway</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="api-gateway-traffic.html" data-category="Gateway">Traffic management and overload</a></li>
+            <li><a href="#" data-page="api-gateway-auth.html" data-category="Gateway">Authentication and authorization failures</a></li>
+            <li><a href="#" data-page="api-gateway-upstream.html" data-category="Gateway">Upstream dependency instability</a></li>
+            <li><a href="#" data-page="api-gateway-connections.html" data-category="Gateway">Connection and resource exhaustion</a></li>
+          </ul>
+        </div>
 
+        <div class="nav-group">
+          <div class="nav-group-header"><span>Elasticsearch</span><span class="chip chip--ghost">Search</span></div>
+          <ul class="nav-list">
+            <li><a href="#" data-page="elasticsearch-query.html" data-category="Search">Query execution pressure</a></li>
+            <li><a href="#" data-page="elasticsearch-memory.html" data-category="Search">Heap and memory pressure</a></li>
+            <li><a href="#" data-page="elasticsearch-shards.html" data-category="Search">Shard distribution imbalance</a></li>
+            <li><a href="#" data-page="elasticsearch-indexing.html" data-category="Search">Indexing and merge backpressure</a></li>
+          </ul>
         </div>
       </div>
     </aside>
-    
-    <main class="tech-content">
+
+    <main class="tech-main">
       <div class="loading-state" id="loadingState">
         <div class="spinner"></div>
         <div class="loading-text">Loading...</div>
@@ -112,43 +109,36 @@
       <span class="site-footer-meta">Last updated May 2026</span>
     </footer>
   </div>
-  
+
   <script>
     const contentFrame = document.getElementById('contentFrame');
     const loadingState = document.getElementById('loadingState');
     const navLinks = document.querySelectorAll('.nav-list a');
-    
+
     function loadPage(pageUrl) {
-      loadingState.classList.add('show');
+      loadingState.classList.add('is-active');
       contentFrame.style.opacity = '0';
       contentFrame.src = `tech-issues/${pageUrl}`;
-      
-      // Update active state
+
       navLinks.forEach(link => {
-        if (link.dataset.page === pageUrl) {
-          link.classList.add('active');
-        } else {
-          link.classList.remove('active');
-        }
+        link.classList.toggle('is-active', link.dataset.page === pageUrl);
       });
-      
-      // Store current page in URL hash
+
       window.location.hash = pageUrl.replace('.html', '');
     }
-    
+
     contentFrame.addEventListener('load', () => {
-      loadingState.classList.remove('show');
+      loadingState.classList.remove('is-active');
       contentFrame.style.opacity = '1';
     });
-    
+
     navLinks.forEach(link => {
       link.addEventListener('click', (e) => {
         e.preventDefault();
         loadPage(link.dataset.page);
       });
     });
-    
-    // Handle browser back/forward
+
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.substring(1);
       if (hash) {
@@ -159,12 +149,9 @@
         }
       }
     });
-    
-    // Load initial page from hash or default to first topic
+
     const initialHash = window.location.hash.substring(1);
     const initialPage = initialHash ? `${initialHash}.html` : 'api-gateway-traffic.html';
-    
-    // Validate the page exists in nav
     const validPage = Array.from(navLinks).some(link => link.dataset.page === initialPage);
     loadPage(validPage ? initialPage : 'api-gateway-traffic.html');
   </script>
