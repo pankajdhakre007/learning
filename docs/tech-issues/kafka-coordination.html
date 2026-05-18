@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kafka — Cluster Coordination Instability</title>
+  <link rel="stylesheet" href="../assets/css/site.css" />
+</head>
+<body class="tech-issue-page">
+  <div class="page" id="root"></div>
+  <script src="../assets/js/tech-issue-renderer.js"></script>
+  <script>
+    const pageData = {
+    "hero": {
+        "eyebrow": "Apache Kafka - cluster coordination",
+        "title": "Cluster coordination instability",
+        "description": "Guide covering rebalance storms, group churn, heartbeat failures, and unstable partition assignment behavior."
+    },
+    "synonyms": [
+        "Rebalance storms",
+        "Group churn",
+        "Coordination failures",
+        "Membership flapping",
+        "Heartbeat failures",
+        "Assignment thrashing",
+        "Coordinator overload",
+        "Session timeout churn"
+    ],
+    "questions": [
+        "Why are consumer groups rebalancing continuously?",
+        "How do heartbeat and session timeout settings interact?",
+        "How does autoscaling trigger group churn?",
+        "How do you stop partition ownership flapping?"
+    ],
+    "layers": [
+        {
+            "name": "Coordinator",
+            "title": "Group coordinator pressure",
+            "description": "Coordinator nodes can become overloaded by frequent joins, leaves, and metadata updates.",
+            "symptoms": [
+                "Frequent group state transitions",
+                "Long rebalance times",
+                "Join/sync latency spikes"
+            ],
+            "causes": [
+                "Many consumer instances restarting",
+                "Coordinator hotspotting",
+                "Large groups with frequent membership change"
+            ],
+            "effects": [
+                "Processing pauses during rebalances",
+                "Lag jumps after each rebalance",
+                "Operational instability"
+            ],
+            "mitigations": [
+                "Use static group membership where possible",
+                "Reduce churn from deployments",
+                "Distribute coordinator load"
+            ],
+            "metrics": [
+                "Rebalances per hour",
+                "JoinGroup/SyncGroup latency",
+                "Coordinator request rate",
+                "Group state transition count"
+            ],
+            "tradeoffs": [
+                "Longer timeouts reduce churn but slow failover",
+                "Static membership reduces flexibility during dynamic scaling"
+            ]
+        },
+        {
+            "name": "Members",
+            "title": "Heartbeat and session timing failures",
+            "description": "Consumers missing heartbeats are evicted, forcing full or partial reassignment.",
+            "symptoms": [
+                "Consumers repeatedly leave and rejoin",
+                "Missed heartbeat logs",
+                "Partition reassignments under CPU spikes"
+            ],
+            "causes": [
+                "GC pauses or CPU starvation",
+                "Network jitter",
+                "Tight session timeouts"
+            ],
+            "effects": [
+                "Duplicate processing risk",
+                "Ordering disruption windows",
+                "Throughput drops during rebalance"
+            ],
+            "mitigations": [
+                "Tune heartbeat/session/max poll intervals",
+                "Avoid long blocking calls in poll loop",
+                "Set CPU/memory headroom"
+            ],
+            "metrics": [
+                "Heartbeat failure count",
+                "Poll interval breaches",
+                "Consumer process GC pauses",
+                "Member eviction rate"
+            ],
+            "tradeoffs": [
+                "Relaxed intervals improve stability but delay unhealthy member detection",
+                "Overly strict intervals increase false evictions"
+            ]
+        },
+        {
+            "name": "Deployments",
+            "title": "Release and autoscaling induced churn",
+            "description": "Rolling updates and horizontal autoscaling can create membership churn if uncontrolled.",
+            "symptoms": [
+                "Rebalance spikes during deploy windows",
+                "Throughput dips on scale events",
+                "Lag never fully recovers"
+            ],
+            "causes": [
+                "Large concurrent pod restarts",
+                "Scale oscillation",
+                "No graceful shutdown handling"
+            ],
+            "effects": [
+                "Frequent stop-the-world consumer phases",
+                "Tail latency increase",
+                "Reduced effective capacity"
+            ],
+            "mitigations": [
+                "Stagger rollouts",
+                "Graceful partition revocation handling",
+                "Stabilize autoscaling thresholds"
+            ],
+            "metrics": [
+                "Deploy-time rebalance count",
+                "Scale up/down frequency",
+                "Lag recovery time",
+                "Consumer availability during rollout"
+            ],
+            "tradeoffs": [
+                "Slower rollouts improve stability but delay release speed",
+                "Autoscaling hysteresis reduces oscillation but reacts slower to surges"
+            ]
+        },
+        {
+            "name": "Topology",
+            "title": "Metadata and partition topology churn",
+            "description": "Frequent partition movement or leader changes can amplify coordination instability.",
+            "symptoms": [
+                "Leader election churn",
+                "Metadata refresh spikes",
+                "Temporary assignment inconsistencies"
+            ],
+            "causes": [
+                "Aggressive reassignments",
+                "Broker instability",
+                "Frequent topology changes"
+            ],
+            "effects": [
+                "Consumer pause windows",
+                "Inconsistent fetch performance",
+                "Higher operational risk"
+            ],
+            "mitigations": [
+                "Plan reassignment windows carefully",
+                "Stabilize broker health before rebalance operations",
+                "Limit concurrent topology changes"
+            ],
+            "metrics": [
+                "Leader election count",
+                "Metadata update rate",
+                "Partition movement events",
+                "Assignment convergence time"
+            ],
+            "tradeoffs": [
+                "Faster balancing can increase short-term turbulence",
+                "Conservative balancing prolongs uneven load"
+            ]
+        }
+    ],
+    "comparisons": [
+        {
+            "tech": "Kubernetes",
+            "problem": "Control-plane scheduling churn"
+        },
+        {
+            "tech": "Zookeeper/etcd",
+            "problem": "Coordination hot spots"
+        },
+        {
+            "tech": "API Gateway",
+            "problem": "Config rollout instability"
+        },
+        {
+            "tech": "MongoDB",
+            "problem": "Replica state flapping"
+        },
+        {
+            "tech": "Elasticsearch",
+            "problem": "Shard relocation churn"
+        }
+    ],
+    "insight": "Kafka coordination issues are usually churn problems, not raw capacity problems. Reducing membership and topology volatility is often the fastest path to stability."
+};
+    renderTechIssuePage(pageData);
+  </script>
+</body>
+</html>

@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Technology Issues & Resolutions — Learning Docs</title>
+  <title>Production Issues & Resolutions — Learning Docs</title>
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
 <body class="tech-issues-shell">
@@ -11,7 +11,7 @@
     <header class="tech-header">
       <div class="brand">
         <p class="eyebrow">Technology Deep-Dives</p>
-        <h1>Issues &amp; Resolutions</h1>
+        <h1>Production Issues &amp; Resolutions</h1>
       </div>
       <a class="button-icon" href="index.html" aria-label="Back to docs home" title="Back to home">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -23,48 +23,78 @@
     <aside class="tech-sidebar">
       <div class="sidebar-section">
         <div class="sidebar-title">All Topics</div>
-        <ul class="nav-list" id="navList">
-          <li><a href="#" data-page="api-gateway-traffic.html" data-category="Gateway">
-            <span class="nav-item-title">API Gateway Traffic Management</span>
-            <span class="nav-item-tag">Gateway</span>
-          </a></li>
-          <li><a href="#" data-page="kubernetes-resources.html" data-category="Orchestration">
-            <span class="nav-item-title">Kubernetes Resource Exhaustion</span>
-            <span class="nav-item-tag">Orchestration</span>
-          </a></li>
-          <li><a href="#" data-page="kafka-partition.html" data-category="Messaging">
-            <span class="nav-item-title">Kafka Partitioning & Distribution</span>
-            <span class="nav-item-tag">Messaging</span>
-          </a></li>
-          <li><a href="#" data-page="kafka-storage.html" data-category="Messaging">
-            <span class="nav-item-title">Kafka Storage & Replication</span>
-            <span class="nav-item-tag">Messaging</span>
-          </a></li>
-          <li><a href="#" data-page="redis-memory.html" data-category="Cache">
-            <span class="nav-item-title">Redis Memory Pressure</span>
-            <span class="nav-item-tag">Cache</span>
-          </a></li>
-          <li><a href="#" data-page="elasticsearch-query.html" data-category="Search">
-            <span class="nav-item-title">Elasticsearch Query Pressure</span>
-            <span class="nav-item-tag">Search</span>
-          </a></li>
-          <li><a href="#" data-page="mongodb-query.html" data-category="Database">
-            <span class="nav-item-title">MongoDB Query Performance</span>
-            <span class="nav-item-tag">Database</span>
-          </a></li>
-          <li><a href="#" data-page="mongodb-distribution.html" data-category="Database">
-            <span class="nav-item-title">MongoDB Data Distribution</span>
-            <span class="nav-item-tag">Database</span>
-          </a></li>
-          <li><a href="#" data-page="mongodb-replication.html" data-category="Database">
-            <span class="nav-item-title">MongoDB Replication Delays</span>
-            <span class="nav-item-tag">Database</span>
-          </a></li>
-          <li><a href="#" data-page="cassandra-distribution.html" data-category="Database">
-            <span class="nav-item-title">Cassandra Data Distribution</span>
-            <span class="nav-item-tag">Database</span>
-          </a></li>
-        </ul>
+        <div id="navList" class="tech-groups">
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">Apache Kafka</span><span class="tech-group-pill">Messaging</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="kafka-throughput.html" data-category="Messaging"><span class="nav-item-title">Throughput imbalance</span></a></li>
+              <li><a href="#" data-page="kafka-coordination.html" data-category="Messaging"><span class="nav-item-title">Cluster coordination instability</span></a></li>
+              <li><a href="#" data-page="kafka-storage.html" data-category="Messaging"><span class="nav-item-title">Storage and replication pressure</span></a></li>
+              <li><a href="#" data-page="kafka-partition.html" data-category="Messaging"><span class="nav-item-title">Partitioning and data distribution issues</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">MongoDB</span><span class="tech-group-pill">Database</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="mongodb-query.html" data-category="Database"><span class="nav-item-title">Query performance degradation</span></a></li>
+              <li><a href="#" data-page="mongodb-replication.html" data-category="Database"><span class="nav-item-title">Replication and consistency delays</span></a></li>
+              <li><a href="#" data-page="mongodb-distribution.html" data-category="Database"><span class="nav-item-title">Data distribution imbalance</span></a></li>
+              <li><a href="#" data-page="mongodb-resources.html" data-category="Database"><span class="nav-item-title">Resource saturation</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">Redis</span><span class="tech-group-pill">Cache</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="redis-memory.html" data-category="Cache"><span class="nav-item-title">Memory pressure</span></a></li>
+              <li><a href="#" data-page="redis-access.html" data-category="Cache"><span class="nav-item-title">Data access imbalance</span></a></li>
+              <li><a href="#" data-page="redis-replication.html" data-category="Cache"><span class="nav-item-title">Replication and persistence delays</span></a></li>
+              <li><a href="#" data-page="redis-latency.html" data-category="Cache"><span class="nav-item-title">Latency and blocking operations</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">Cassandra</span><span class="tech-group-pill">Database</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="cassandra-distribution.html" data-category="Database"><span class="nav-item-title">Data distribution imbalance</span></a></li>
+              <li><a href="#" data-page="cassandra-compaction.html" data-category="Database"><span class="nav-item-title">Storage and compaction pressure</span></a></li>
+              <li><a href="#" data-page="cassandra-consistency.html" data-category="Database"><span class="nav-item-title">Consistency and repair problems</span></a></li>
+              <li><a href="#" data-page="cassandra-tombstones.html" data-category="Database"><span class="nav-item-title">Read amplification and tombstones</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">Kubernetes</span><span class="tech-group-pill">Orchestration</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="kubernetes-resources.html" data-category="Orchestration"><span class="nav-item-title">Resource exhaustion</span></a></li>
+              <li><a href="#" data-page="kubernetes-scheduling.html" data-category="Orchestration"><span class="nav-item-title">Scheduling and placement failures</span></a></li>
+              <li><a href="#" data-page="kubernetes-lifecycle.html" data-category="Orchestration"><span class="nav-item-title">Application lifecycle instability</span></a></li>
+              <li><a href="#" data-page="kubernetes-networking.html" data-category="Orchestration"><span class="nav-item-title">Cluster networking problems</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">API Gateway</span><span class="tech-group-pill">Gateway</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="api-gateway-traffic.html" data-category="Gateway"><span class="nav-item-title">Traffic management and overload</span></a></li>
+              <li><a href="#" data-page="api-gateway-auth.html" data-category="Gateway"><span class="nav-item-title">Authentication and authorization failures</span></a></li>
+              <li><a href="#" data-page="api-gateway-upstream.html" data-category="Gateway"><span class="nav-item-title">Upstream dependency instability</span></a></li>
+              <li><a href="#" data-page="api-gateway-connections.html" data-category="Gateway"><span class="nav-item-title">Connection and resource exhaustion</span></a></li>
+            </ul>
+          </div>
+
+          <div class="tech-group">
+            <div class="tech-group-summary"><span class="tech-group-title">Elasticsearch</span><span class="tech-group-pill">Search</span></div>
+            <ul class="nav-list">
+              <li><a href="#" data-page="elasticsearch-query.html" data-category="Search"><span class="nav-item-title">Query execution pressure</span></a></li>
+              <li><a href="#" data-page="elasticsearch-memory.html" data-category="Search"><span class="nav-item-title">Heap and memory pressure</span></a></li>
+              <li><a href="#" data-page="elasticsearch-shards.html" data-category="Search"><span class="nav-item-title">Shard distribution imbalance</span></a></li>
+              <li><a href="#" data-page="elasticsearch-indexing.html" data-category="Search"><span class="nav-item-title">Indexing and merge backpressure</span></a></li>
+            </ul>
+          </div>
+
+        </div>
       </div>
     </aside>
     

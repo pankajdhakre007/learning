@@ -62,7 +62,7 @@ button {
 }
 
 .page-shell {
-  width: min(1180px, 100%);
+  width: min(1240px, 100%);
   margin: 0 auto;
   padding: 24px 18px 32px;
   display: grid;
@@ -519,7 +519,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .page { 
-  max-width: 1140px; 
+  max-width: 1200px; 
   margin: 0 auto; 
 }
 
@@ -906,18 +906,21 @@ tbody tr:hover {
    TechIssues Split-Pane Layout
    ======================================== */
 
+
 .tech-issues-shell {
   margin: 0;
-  padding: 0;
-  overflow: hidden;
+  padding: 24px 18px 32px;
+  overflow: auto;
 }
 
 .tech-container {
+  width: min(1240px, 100%);
+  margin: 0 auto;
   display: grid;
-  grid-template-columns: 340px 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
-  overflow: hidden;
+  grid-template-columns: 296px minmax(0, 1fr);
+  grid-template-rows: auto minmax(0, 1fr);
+  gap: 18px;
+  min-height: calc(100vh - 56px);
 }
 
 .tech-header {
@@ -925,10 +928,11 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 28px;
-  background: rgba(15, 23, 42, 0.95);
-  border-bottom: 1px solid var(--border);
-  backdrop-filter: blur(12px);
+  padding: 22px 22px;
+  border-radius: var(--radius);
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border);
+  box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
 }
 
 .tech-header .brand {
@@ -954,15 +958,18 @@ tbody tr:hover {
 }
 
 .tech-sidebar {
-  background: rgba(15, 23, 42, 0.9);
-  border-right: 1px solid var(--border);
+  background: rgba(15, 23, 42, 0.92);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
   overflow-y: auto;
   overflow-x: hidden;
-  padding: 24px 0;
+  padding: 18px 0;
+  max-height: calc(100vh - 170px);
 }
 
 .sidebar-section {
-  padding: 0 20px 20px;
+  padding: 0 18px 18px;
 }
 
 .sidebar-title {
@@ -974,6 +981,49 @@ tbody tr:hover {
   margin-bottom: 12px;
   padding: 0 8px;
   font-weight: 600;
+}
+
+.tech-groups {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.tech-group {
+  border: 1px solid var(--soft-border);
+  border-radius: 10px;
+  background: rgba(15, 23, 42, 0.45);
+  overflow: hidden;
+}
+
+.tech-group-summary {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  padding: 10px 12px;
+  color: #e2e8f0;
+  font-weight: 600;
+}
+
+.tech-group-title {
+  font-size: 13px;
+}
+
+.tech-group-pill {
+  font-family: ui-monospace, 'Courier New', monospace;
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border: 1px solid var(--soft-border);
+  border-radius: 999px;
+  padding: 2px 8px;
+  background: rgba(148, 163, 184, 0.08);
+}
+
+.tech-group .nav-list {
+  padding: 0 8px 8px;
 }
 
 .nav-list {
@@ -1039,9 +1089,13 @@ tbody tr:hover {
 }
 
 .tech-content {
-  background: #020617;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.16);
+  border-radius: var(--radius);
+  box-shadow: 0 24px 70px rgba(15, 23, 42, 0.22);
   position: relative;
   overflow: hidden;
+  min-height: 720px;
 }
 
 .content-frame {
@@ -1104,18 +1158,27 @@ tbody tr:hover {
 
 @media (max-width: 1024px) {
   .tech-container {
-    grid-template-columns: 280px 1fr;
+    grid-template-columns: 272px minmax(0, 1fr);
   }
 }
 
 @media (max-width: 768px) {
+  .tech-issues-shell {
+    padding: 24px 16px 36px;
+  }
+
   .tech-container {
     grid-template-columns: 1fr;
     grid-template-rows: auto auto 1fr;
+    min-height: auto;
   }
+
   .tech-sidebar {
-    border-right: none;
-    border-bottom: 1px solid var(--border);
+    border-right: 1px solid rgba(148, 163, 184, 0.16);
     max-height: 40vh;
+  }
+
+  .tech-content {
+    min-height: 66vh;
   }
 }

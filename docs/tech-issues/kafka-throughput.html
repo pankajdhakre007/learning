@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Kafka — Throughput Imbalance</title>
+  <link rel="stylesheet" href="../assets/css/site.css" />
+</head>
+<body class="tech-issue-page">
+  <div class="page" id="root"></div>
+  <script src="../assets/js/tech-issue-renderer.js"></script>
+  <script>
+    const pageData = {
+    "hero": {
+        "eyebrow": "Apache Kafka - streaming infrastructure",
+        "title": "Throughput imbalance",
+        "description": "Guide covering producer-consumer rate mismatch, lag growth, backpressure propagation, and throughput collapse patterns."
+    },
+    "synonyms": [
+        "Consumer lag",
+        "Backpressure",
+        "Queue buildup",
+        "Pipeline saturation",
+        "Fetch bottleneck",
+        "Lag amplification",
+        "Throughput choke point",
+        "Processing backlog"
+    ],
+    "questions": [
+        "Why is consumer lag growing while brokers look healthy?",
+        "How do you isolate producer-rate versus consumer-rate bottlenecks?",
+        "Why does throughput collapse during peak traffic?",
+        "How does downstream latency propagate into Kafka lag?"
+    ],
+    "layers": [
+        {
+            "name": "Ingress",
+            "title": "Producer ingress rate mismatch",
+            "description": "Producers can outpace broker write and consumer read capacity, creating sustained lag growth.",
+            "symptoms": [
+                "Produced records/sec consistently exceeds consumed records/sec",
+                "Topic backlog grows continuously",
+                "End-to-end processing delay rises"
+            ],
+            "causes": [
+                "Burst traffic without shaping",
+                "Large messages reduce effective throughput",
+                "Unbounded producer retries"
+            ],
+            "effects": [
+                "Data freshness SLA misses",
+                "Increased recovery time after spikes",
+                "Retry storms"
+            ],
+            "mitigations": [
+                "Apply producer-side rate shaping",
+                "Use compression and sane batch size",
+                "Tune retry and timeout policy"
+            ],
+            "metrics": [
+                "Records in vs out per second",
+                "Backlog size by topic",
+                "Consumer lag slope",
+                "Produce request latency"
+            ],
+            "tradeoffs": [
+                "Rate limiting protects stability but can delay ingestion",
+                "Higher batching improves throughput but increases per-record latency"
+            ]
+        },
+        {
+            "name": "Broker",
+            "title": "Broker queue and IO pressure",
+            "description": "Broker internals become bottlenecks when request queues and disk/network IO saturate.",
+            "symptoms": [
+                "Request queue depth increases",
+                "Disk IO wait spikes",
+                "Network saturation on hot brokers"
+            ],
+            "causes": [
+                "Hot partitions on few brokers",
+                "Slow storage path",
+                "Insufficient broker count"
+            ],
+            "effects": [
+                "Ack delays",
+                "Higher produce latency",
+                "Replica lag growth"
+            ],
+            "mitigations": [
+                "Rebalance partitions/leaders",
+                "Scale brokers and storage throughput",
+                "Tune network and request queues"
+            ],
+            "metrics": [
+                "Request queue size",
+                "Disk IO wait",
+                "Broker network throughput",
+                "Under-replicated partitions"
+            ],
+            "tradeoffs": [
+                "More brokers increase operational complexity",
+                "Aggressive rebalancing introduces temporary churn"
+            ]
+        },
+        {
+            "name": "Consumers",
+            "title": "Consumer processing bottlenecks",
+            "description": "Consumers may be constrained by CPU, deserialization, external calls, or low partition parallelism.",
+            "symptoms": [
+                "Lag concentrated in specific partitions",
+                "Consumer CPU pinned",
+                "Slow commit progression"
+            ],
+            "causes": [
+                "Heavy per-message processing",
+                "Blocking downstream APIs",
+                "Too few partitions for concurrency"
+            ],
+            "effects": [
+                "Latency tails increase",
+                "Autoscaling appears ineffective",
+                "Missed downstream SLAs"
+            ],
+            "mitigations": [
+                "Optimize processing path",
+                "Increase partitions carefully",
+                "Isolate slow handlers and use dead-letter flow"
+            ],
+            "metrics": [
+                "Lag per partition",
+                "Processing time per message",
+                "Commit latency",
+                "Consumer CPU utilization"
+            ],
+            "tradeoffs": [
+                "More partitions improve parallelism but raise metadata overhead",
+                "Async processing improves throughput but complicates ordering"
+            ]
+        },
+        {
+            "name": "Downstream",
+            "title": "Backpressure from dependencies",
+            "description": "Databases, services, or sinks downstream can throttle consumer throughput and feed back into Kafka lag.",
+            "symptoms": [
+                "Lag spikes correlate with sink latency",
+                "Retry counts increase",
+                "Consumer throughput oscillates"
+            ],
+            "causes": [
+                "Sink write limits",
+                "Connection pool exhaustion",
+                "Inefficient batch flush policies"
+            ],
+            "effects": [
+                "Backlog accumulation",
+                "Instability during recovery",
+                "Cascading failures"
+            ],
+            "mitigations": [
+                "Circuit breakers and bounded retries",
+                "Adaptive batch sizing",
+                "Separate fast and slow lanes"
+            ],
+            "metrics": [
+                "Sink latency and error rate",
+                "Retry rate",
+                "Batch flush time",
+                "End-to-end latency"
+            ],
+            "tradeoffs": [
+                "Strict backpressure protects systems but increases queueing delay",
+                "More buffering increases recovery complexity"
+            ]
+        }
+    ],
+    "comparisons": [
+        {
+            "tech": "API Gateway",
+            "problem": "Request queue buildup"
+        },
+        {
+            "tech": "Redis",
+            "problem": "Event loop saturation"
+        },
+        {
+            "tech": "Elasticsearch",
+            "problem": "Search queue pressure"
+        },
+        {
+            "tech": "MongoDB",
+            "problem": "Query backlog under load"
+        },
+        {
+            "tech": "Kubernetes",
+            "problem": "Autoscaling lag vs demand spikes"
+        }
+    ],
+    "insight": "Kafka throughput stability is about sustained rate matching: ingestion, replication, processing, and sink throughput must remain balanced under normal and spike traffic."
+};
+    renderTechIssuePage(pageData);
+  </script>
+</body>
+</html>
