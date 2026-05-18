@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Elasticsearch — Query Execution Pressure</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0f;
+      --surface: #141418;
+      --surface-2: #1b1b21;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --text-primary: #e8e6e1;
+      --text-secondary: #8a8882;
+      --text-tertiary: #55544f;
+      --accent: #e85d26;
+      --accent-dim: rgba(232, 93, 38, 0.12);
+      --accent-border: rgba(232, 93, 38, 0.3);
+      --info: #2d7dd2;
+      --info-dim: rgba(45, 125, 210, 0.1);
+      --info-border: rgba(45, 125, 210, 0.3);
+      --warn-dim: rgba(200, 140, 40, 0.1);
+      --warn-text: #c8a050;
+      --warn-border: rgba(200, 140, 40, 0.25);
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --radius: 6px;
+      --radius-lg: 10px;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .page { max-width: 860px; margin: 0 auto; }
+    .hero {
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      padding: 2rem 2.25rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+    .section { margin-bottom: 2rem; }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+    .pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-size: 13px;
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .pill:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .q-list { display: flex; flex-direction: column; gap: 8px; }
+    .q-item {
+      font-size: 14px;
+      line-height: 1.55;
+      padding: 11px 15px 11px 42px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      position: relative;
+      transition: border-color 0.15s;
+    }
+    .q-item::before {
+      content: '"';
+      position: absolute;
+      left: 14px;
+      top: 10px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .q-item:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .layer-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 1px; }
+    .tab-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface);
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .tab-btn:hover { color: var(--text-secondary); background: var(--surface-2); }
+    .tab-btn.active {
+      background: var(--surface-2);
+      color: var(--accent);
+      border-color: var(--border);
+      border-bottom: 1px solid var(--surface-2);
+      position: relative;
+      z-index: 1;
+    }
+    .layer-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      display: none;
+    }
+    .layer-card.visible { display: block; }
+    .layer-title { font-size: 16px; font-weight: 500; margin-bottom: 0.4rem; }
+    .layer-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .layer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .sub-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+    }
+    .sub-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.5rem;
+    }
+    .sub-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .sub-list li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .sub-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--text-tertiary);
+    }
+    .metrics-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+    .metrics-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-right: 4px;
+    }
+    .metric-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--info-dim);
+      color: var(--info);
+      border: 1px solid var(--info-border);
+    }
+    .tradeoff-box {
+      background: var(--warn-dim);
+      border: 1px solid var(--warn-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+    }
+    .tradeoff-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warn-text);
+      margin-bottom: 0.4rem;
+    }
+    .tradeoff-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .tradeoff-list li {
+      font-size: 13px;
+      color: var(--warn-text);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .tradeoff-list li::before {
+      content: '⚠';
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+      top: 2px;
+    }
+    .compare-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare-table th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .compare-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:first-child {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .compare-table td:last-child { color: var(--accent); }
+    .compare-table tr:hover td { background: var(--surface-2); }
+    .insight {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin-top: 2rem;
+      background: var(--accent-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .insight p {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    @media (max-width: 600px) {
+      .layer-grid { grid-template-columns: 1fr; }
+      .hero { padding: 1.5rem 1.25rem; }
+      .hero h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="root"></div>
+  <script>
+    const pageData = {
+      hero: {
+        eyebrow: "Elasticsearch — distributed search & analytics",
+        title: "Query execution pressure",
+        description: "Staff+/Principal-level guide covering slow searches, aggregation bottlenecks, query execution backpressure, and concurrent search pressure in Elasticsearch clusters."
+      },
+      synonyms: [
+        "Slow searches",
+        "Aggregation pressure",
+        "Query backpressure",
+        "Search thread pool saturation",
+        "Query latency explosion",
+        "Expensive searches",
+        "Bulk query pressure",
+        "Search queue buildup"
+      ],
+      questions: [
+        "Why is my Elasticsearch search latency increasing?",
+        "How do I optimize slow aggregations?",
+        "What causes query backpressure in Elasticsearch?",
+        "Why is the search thread pool saturated?",
+        "How do I detect expensive queries?",
+        "Why are some nodes handling more search load?",
+        "What causes query queue buildup?",
+        "How do I scale Elasticsearch for high query volume?"
+      ],
+      layers: [
+        {
+          name: "Query",
+          title: "Slow searches & inefficient queries",
+          description: "Elasticsearch searches can be slow due to inefficient query logic, missing optimizations, or expensive filtering. Each slow query consumes thread pool resources, reducing capacity for other queries.",
+          symptoms: ["Search latency increasing", "High query per second consuming resources", "Thread pool queue building up", "Some shards taking much longer"],
+          causes: ["Inefficient query DSL (nested queries)", "Missing filters that could reduce search space", "Complex wildcard searches", "Script-based scoring"],
+          effects: ["Latency tail increase from slow queries", "Thread pool exhaustion", "Other queries queued waiting", "Complete search timeout"],
+          mitigations: ["Optimize query DSL", "Use filters instead of queries where possible", "Implement query caching", "Add appropriate indexes", "Profile slow queries"],
+          metrics: ["Query latency percentiles", "Queries per second", "Slow query log entries", "Thread pool usage", "Query cache hit ratio"],
+          tradeoffs: ["Query optimization takes analysis time", "More indexes increase write overhead", "Query caching has memory cost"]
+        },
+        {
+          name: "Aggregation",
+          title: "Aggregation pipeline bottlenecks",
+          description: "Aggregations (facets, histograms, cardinality) scan many documents and build in-memory structures. Complex nested aggregations can become severe bottlenecks.",
+          symptoms: ["Aggregation latency much higher than search", "Memory pressure during aggregations", "Concurrent aggregations blocking", "Aggregation timeouts"],
+          causes: ["High cardinality aggregations (unique users)", "Nested aggregations on large datasets", "Cardinality estimation on unbounded fields", "Aggregation on non-indexed fields"],
+          effects: ["Latency explosion from aggregations", "Memory exhaustion", "Other queries blocked", "Complete service degradation"],
+          mitigations: ["Use approximate cardinality (HyperLogLog)", "Implement pre-aggregation", "Reduce aggregation scope", "Use keyword instead of text fields", "Sample large datasets"],
+          metrics: ["Aggregation latency", "Memory per aggregation", "Aggregation throughput", "Cardinality estimation error", "Pre-aggregation hit rate"],
+          tradeoffs: ["Approximate cardinality reduces accuracy", "Pre-aggregation adds latency to indexing", "Sampling reduces result accuracy"]
+        },
+        {
+          name: "Concurrency",
+          title: "Search thread pool saturation",
+          description: "Elasticsearch uses fixed-size thread pools for search. When concurrent queries exceed thread pool size, new queries queue and wait. Thread pool saturation causes latency explosion.",
+          symptoms: ["Search thread pool at max queue", "Requests being rejected", "Latency increasing with concurrent queries", "Search timeout errors"],
+          causes: ["Slow queries consuming all threads", "Too many concurrent requests for cluster", "Thread pool size too small", "Uneven query distribution"],
+          effects: ["New queries queued and delayed", "Latency increases quadratically", "Cascading timeouts", "Service unavailability"],
+          mitigations: ["Increase thread pool size", "Reduce per-query latency", "Implement circuit breakers", "Scale cluster nodes", "Add request deduplication"],
+          metrics: ["Search thread pool active", "Search thread pool queue length", "Request rejection rate", "Queue wait latency", "Thread pool utilization"],
+          tradeoffs: ["Larger thread pools increase memory", "Optimizing queries takes effort", "Scaling adds cost"]
+        },
+        {
+          name: "Distribution",
+          title: "Uneven query load distribution",
+          description: "Some shards or nodes can receive disproportionate query load, becoming bottlenecks while other nodes sit idle. Query load imbalance limits effective throughput.",
+          symptoms: ["One shard much slower than others", "One node CPU high", "Shard query latency variable", "Scatter-gather very uneven"],
+          causes: ["Hot shard receiving more requests", "Uneven data distribution", "Replica imbalance", "Client-side routing issues"],
+          effects: ["Slowest shard limits query latency", "Other shards underutilized", "Effective throughput limited", "Tail latency from slowest shard"],
+          mitigations: ["Rebalance shard distribution", "Implement client-side request routing", "Use preferred nodes", "Monitor shard metrics", "Implement hot shard detection"],
+          metrics: ["Query latency per shard", "Query rate per shard", "CPU per shard", "GC pressure per node", "Scatter-gather latency"],
+          tradeoffs: ["Rebalancing causes cluster churn", "Client-side routing increases complexity", "Hot shard mitigation requires code changes"]
+        }
+      ],
+      comparisons: [
+        { tech: "MongoDB", problem: "Query execution pressure" },
+        { tech: "PostgreSQL", problem: "Slow query execution" },
+        { tech: "Cassandra", problem: "Partition scan latency" },
+        { tech: "Solr", problem: "Query handler thread saturation" },
+        { tech: "Kafka", problem: "Fetch request backpressure" }
+      ],
+      insight: "Elasticsearch query execution pressure is fundamentally about matching query complexity to cluster capacity. Unlike databases where slow queries are individual incidents, in Elasticsearch, slow queries have systemic effects by consuming shared thread pool resources. Strong Elasticsearch operators understand this multiplier effect: each slow query degrades service for other queries. Query optimization is not optional; it's essential for cluster stability."
+    };
+
+    function renderPage() {
+      const root = document.getElementById('root');
+      let html = `<div class="hero"><p class="hero-eyebrow">${pageData.hero.eyebrow}</p><h1>${pageData.hero.title}</h1><p>${pageData.hero.description}</p></div><div class="section"><p class="section-label">Common synonyms</p><div class="pill-grid">${pageData.synonyms.map(s => `<span class="pill">${s}</span>`).join('')}</div></div><div class="section"><p class="section-label">How interviewers phrase this</p><div class="q-list">${pageData.questions.map(q => `<div class="q-item">${q}</div>`).join('')}</div></div><div class="section"><p class="section-label">Layer-by-layer breakdown</p><div class="layer-tabs">${pageData.layers.map((l, i) => `<button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="showLayer(${i})">${l.name}</button>`).join('')}</div>${pageData.layers.map((layer, idx) => `<div class="layer-card ${idx === 0 ? 'visible' : ''}" id="layer-${idx}"><p class="layer-title">${layer.title}</p><p class="layer-desc">${layer.description}</p><div class="layer-grid"><div class="sub-card"><p class="sub-label">Observable symptoms</p><ul class="sub-list">${layer.symptoms.map(s => `<li>${s}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Root causes</p><ul class="sub-list">${layer.causes.map(c => `<li>${c}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">System effects</p><ul class="sub-list">${layer.effects.map(e => `<li>${e}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Mitigations</p><ul class="sub-list">${layer.mitigations.map(m => `<li>${m}</li>`).join('')}</ul></div></div><div class="metrics-row"><span class="metrics-label">Key metrics</span>${layer.metrics.map(m => `<span class="metric-pill">${m}</span>`).join('')}</div><div class="tradeoff-box"><p class="tradeoff-label">Tradeoffs</p><ul class="tradeoff-list">${layer.tradeoffs.map(t => `<li>${t}</li>`).join('')}</ul></div></div>`).join('')}</div><div class="section"><p class="section-label">Universal distributed systems pattern</p><div class="compare-wrap"><table class="compare-table"><thead><tr><th>Technology</th><th>Equivalent problem</th></tr></thead><tbody>${pageData.comparisons.map(c => `<tr><td>${c.tech}</td><td>${c.problem}</td></tr>`).join('')}</tbody></table></div></div><div class="insight"><p>${pageData.insight}</p></div>`;
+      root.innerHTML = html;
+    }
+
+    function showLayer(idx) {
+      document.querySelectorAll('.layer-card').forEach((c, i) => {
+        c.classList.toggle('visible', i === idx);
+      });
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+    }
+
+    renderPage();
+  </script>
+</body>
+</html>

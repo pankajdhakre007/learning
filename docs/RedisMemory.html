@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Redis — Memory Pressure & Eviction</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0f;
+      --surface: #141418;
+      --surface-2: #1b1b21;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --text-primary: #e8e6e1;
+      --text-secondary: #8a8882;
+      --text-tertiary: #55544f;
+      --accent: #e85d26;
+      --accent-dim: rgba(232, 93, 38, 0.12);
+      --accent-border: rgba(232, 93, 38, 0.3);
+      --info: #2d7dd2;
+      --info-dim: rgba(45, 125, 210, 0.1);
+      --info-border: rgba(45, 125, 210, 0.3);
+      --warn-dim: rgba(200, 140, 40, 0.1);
+      --warn-text: #c8a050;
+      --warn-border: rgba(200, 140, 40, 0.25);
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --radius: 6px;
+      --radius-lg: 10px;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .page { max-width: 860px; margin: 0 auto; }
+    .hero {
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      padding: 2rem 2.25rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+    .section { margin-bottom: 2rem; }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+    .pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-size: 13px;
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .pill:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .q-list { display: flex; flex-direction: column; gap: 8px; }
+    .q-item {
+      font-size: 14px;
+      line-height: 1.55;
+      padding: 11px 15px 11px 42px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      position: relative;
+      transition: border-color 0.15s;
+    }
+    .q-item::before {
+      content: '"';
+      position: absolute;
+      left: 14px;
+      top: 10px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .q-item:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .layer-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 1px; }
+    .tab-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface);
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .tab-btn:hover { color: var(--text-secondary); background: var(--surface-2); }
+    .tab-btn.active {
+      background: var(--surface-2);
+      color: var(--accent);
+      border-color: var(--border);
+      border-bottom: 1px solid var(--surface-2);
+      position: relative;
+      z-index: 1;
+    }
+    .layer-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      display: none;
+    }
+    .layer-card.visible { display: block; }
+    .layer-title { font-size: 16px; font-weight: 500; margin-bottom: 0.4rem; }
+    .layer-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .layer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .sub-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+    }
+    .sub-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.5rem;
+    }
+    .sub-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .sub-list li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .sub-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--text-tertiary);
+    }
+    .metrics-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+    .metrics-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-right: 4px;
+    }
+    .metric-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--info-dim);
+      color: var(--info);
+      border: 1px solid var(--info-border);
+    }
+    .tradeoff-box {
+      background: var(--warn-dim);
+      border: 1px solid var(--warn-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+    }
+    .tradeoff-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warn-text);
+      margin-bottom: 0.4rem;
+    }
+    .tradeoff-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .tradeoff-list li {
+      font-size: 13px;
+      color: var(--warn-text);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .tradeoff-list li::before {
+      content: '⚠';
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+      top: 2px;
+    }
+    .compare-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare-table th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .compare-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:first-child {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .compare-table td:last-child { color: var(--accent); }
+    .compare-table tr:hover td { background: var(--surface-2); }
+    .insight {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin-top: 2rem;
+      background: var(--accent-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .insight p {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    @media (max-width: 600px) {
+      .layer-grid { grid-template-columns: 1fr; }
+      .hero { padding: 1.5rem 1.25rem; }
+      .hero h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="root"></div>
+  <script>
+    const pageData = {
+      hero: {
+        eyebrow: "Redis — in-memory data store",
+        title: "Memory pressure & eviction",
+        description: "Staff+/Principal-level guide covering memory exhaustion, cache thrashing, eviction pressure, and resource saturation in Redis deployments."
+      },
+      synonyms: [
+        "Eviction pressure",
+        "Cache thrashing",
+        "OOM pressure",
+        "Memory exhaustion",
+        "Unbounded growth",
+        "Memory fragmentation",
+        "Eviction storms",
+        "Cache miss explosion"
+      ],
+      questions: [
+        "Why is my Redis cache evicting too many keys?",
+        "How do I detect memory pressure in Redis?",
+        "What causes OOM errors in production?",
+        "Why is cache hit ratio dropping suddenly?",
+        "How do I manage TTL effectively?",
+        "What's causing memory fragmentation?",
+        "Why are evictions increasing?",
+        "How do I size Redis memory correctly?"
+      ],
+      layers: [
+        {
+          name: "Allocation",
+          title: "Unbounded key growth & allocation",
+          description: "Redis stores all data in memory without built-in limits. If application code doesn't properly manage key lifecycle or TTLs, memory grows unbounded until Redis runs out of available memory and begins evicting keys.",
+          symptoms: ["Memory usage grows linearly with time", "No plateau in memory consumption", "Evictions increasing daily", "Cache hit ratio degrading"],
+          causes: ["No TTL set on keys", "Keys inserted faster than expired", "Memory leak in application logic", "Misconfigured eviction policy"],
+          effects: ["Eviction storms when memory full", "Cache thrashing from constant evictions", "Application experiencing cache misses", "Cascading performance degradation"],
+          mitigations: ["Set appropriate TTLs on all keys", "Implement TTL renewal strategy", "Use eviction policy (LRU/LFU)", "Monitor key count and memory", "Prune keys during off-peak"],
+          metrics: ["Memory usage trend", "Eviction rate", "Keys count", "Cache hit/miss ratio", "TTL distribution"],
+          tradeoffs: ["Aggressive TTL reduces data freshness", "Manual pruning requires logic", "Eviction policies have overhead"]
+        },
+        {
+          name: "Eviction",
+          title: "Eviction policy & cache thrashing",
+          description: "When Redis reaches maxmemory, it evicts keys according to the configured policy. Under high memory pressure, eviction rate increases dramatically, causing cache thrashing where freshly-loaded data is immediately evicted.",
+          symptoms: ["High eviction rate (keys/sec)", "Cache hit ratio near zero", "Constant cache misses", "Application latency spikes"],
+          causes: ["maxmemory set too low", "Working set larger than available memory", "Inefficient eviction policy for access pattern", "Burst traffic exceeding capacity"],
+          effects: ["Severe cache hit ratio degradation", "Backend database overloaded from cache misses", "Application latency explosion", "Cascading backend failures"],
+          mitigations: ["Increase maxmemory limit", "Upgrade to larger Redis instance", "Optimize eviction policy (LRU vs LFU)", "Reduce working set size", "Implement circuit breaker"],
+          metrics: ["Eviction rate", "Cache hit ratio", "Evicted keys/sec", "Memory fragmentation", "Operations rate"],
+          tradeoffs: ["Larger memory is more expensive", "Better eviction policy adds CPU", "Reducing working set impacts features"]
+        },
+        {
+          name: "Large Objects",
+          title: "Large object storage & memory blast radius",
+          description: "Storing large objects in Redis (large strings, big hashes, large sorted sets) creates disproportionate memory usage and fragmentation. Each large object eviction has a significant impact on available memory.",
+          symptoms: ["Memory usage not proportional to key count", "High per-key memory overhead", "Fragmentation ratio increasing", "Evictions not freeing expected memory"],
+          causes: ["Storing serialized blobs (images, JSON)", "Large documents stored as strings", "Inefficient data structures", "Compression not enabled"],
+          effects: ["Inefficient memory utilization", "Cache thrashing from large evictions", "Memory fragmentation", "Reduced effective cache capacity"],
+          mitigations: ["Move large objects to external storage", "Store references instead of full objects", "Use compression for large strings", "Optimize data structure encoding", "Use smaller, focused keys"],
+          metrics: ["Memory per key", "Fragmentation ratio", "Encoding efficiency", "Object size distribution", "Peak memory"],
+          tradeoffs: ["External storage adds latency", "Compression uses CPU", "Smaller keys increase operation count"]
+        },
+        {
+          name: "Fragmentation",
+          title: "Memory fragmentation & allocation overhead",
+          description: "Redis memory fragmentation occurs when freed memory cannot be reused due to allocator limitations. High fragmentation means available memory is scattered and unusable, forcing premature eviction.",
+          symptoms: ["Fragmentation ratio > 1.5", "Memory not freed after key deletion", "Evictions occurring despite deleted keys", "Memory trending upward even with deletes"],
+          causes: ["Fragmentation from deletion patterns", "Allocator limitations", "Large object deletion creating holes", "Long-lived allocations preventing compaction"],
+          effects: ["Wasted memory due to fragmentation", "Premature eviction of useful keys", "Reduced effective cache capacity", "Application performance impact"],
+          mitigations: ["Monitor fragmentation ratio", "Restart Redis periodically", "Use jemalloc for better fragmentation", "Optimize deletion patterns", "Implement key reorganization"],
+          metrics: ["Fragmentation ratio", "Memory efficiency", "Allocated vs used memory", "Deletion rate", "Reallocations"],
+          tradeoffs: ["Restarts cause temporary unavailability", "Reorganization requires downtime", "Better allocator has memory overhead"]
+        }
+      ],
+      comparisons: [
+        { tech: "Memcached", problem: "Memory eviction pressure" },
+        { tech: "MongoDB", problem: "Cache pressure" },
+        { tech: "Cassandra", problem: "Heap exhaustion" },
+        { tech: "Elasticsearch", problem: "JVM heap pressure" },
+        { tech: "Kafka", problem: "Page cache pressure" }
+      ],
+      insight: "Redis memory pressure is fundamentally about proportional capacity planning. The cache is only useful when hit ratio remains high. Once memory pressure forces evictions faster than typical query patterns, the cache becomes a liability, turning the backend database into the bottleneck. Strong Redis operators understand their working set size, access patterns, and how many keys can safely fit in memory with acceptable TTL and eviction overhead."
+    };
+
+    function renderPage() {
+      const root = document.getElementById('root');
+      let html = `<div class="hero"><p class="hero-eyebrow">${pageData.hero.eyebrow}</p><h1>${pageData.hero.title}</h1><p>${pageData.hero.description}</p></div><div class="section"><p class="section-label">Common synonyms</p><div class="pill-grid">${pageData.synonyms.map(s => `<span class="pill">${s}</span>`).join('')}</div></div><div class="section"><p class="section-label">How interviewers phrase this</p><div class="q-list">${pageData.questions.map(q => `<div class="q-item">${q}</div>`).join('')}</div></div><div class="section"><p class="section-label">Layer-by-layer breakdown</p><div class="layer-tabs">${pageData.layers.map((l, i) => `<button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="showLayer(${i})">${l.name}</button>`).join('')}</div>${pageData.layers.map((layer, idx) => `<div class="layer-card ${idx === 0 ? 'visible' : ''}" id="layer-${idx}"><p class="layer-title">${layer.title}</p><p class="layer-desc">${layer.description}</p><div class="layer-grid"><div class="sub-card"><p class="sub-label">Observable symptoms</p><ul class="sub-list">${layer.symptoms.map(s => `<li>${s}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Root causes</p><ul class="sub-list">${layer.causes.map(c => `<li>${c}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">System effects</p><ul class="sub-list">${layer.effects.map(e => `<li>${e}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Mitigations</p><ul class="sub-list">${layer.mitigations.map(m => `<li>${m}</li>`).join('')}</ul></div></div><div class="metrics-row"><span class="metrics-label">Key metrics</span>${layer.metrics.map(m => `<span class="metric-pill">${m}</span>`).join('')}</div><div class="tradeoff-box"><p class="tradeoff-label">Tradeoffs</p><ul class="tradeoff-list">${layer.tradeoffs.map(t => `<li>${t}</li>`).join('')}</ul></div></div>`).join('')}</div><div class="section"><p class="section-label">Universal distributed systems pattern</p><div class="compare-wrap"><table class="compare-table"><thead><tr><th>Technology</th><th>Equivalent problem</th></tr></thead><tbody>${pageData.comparisons.map(c => `<tr><td>${c.tech}</td><td>${c.problem}</td></tr>`).join('')}</tbody></table></div></div><div class="insight"><p>${pageData.insight}</p></div>`;
+      root.innerHTML = html;
+    }
+
+    function showLayer(idx) {
+      document.querySelectorAll('.layer-card').forEach((c, i) => {
+        c.classList.toggle('visible', i === idx);
+      });
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+    }
+
+    renderPage();
+  </script>
+</body>
+</html>

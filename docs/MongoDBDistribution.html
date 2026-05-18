@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>MongoDB — Data Distribution Imbalance</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    :root {
+      --bg: #0d0d0f;
+      --surface: #141418;
+      --surface-2: #1b1b21;
+      --border: rgba(255,255,255,0.07);
+      --border-hover: rgba(255,255,255,0.14);
+      --text-primary: #e8e6e1;
+      --text-secondary: #8a8882;
+      --text-tertiary: #55544f;
+      --accent: #e85d26;
+      --accent-dim: rgba(232, 93, 38, 0.12);
+      --accent-border: rgba(232, 93, 38, 0.3);
+      --info: #2d7dd2;
+      --info-dim: rgba(45, 125, 210, 0.1);
+      --info-border: rgba(45, 125, 210, 0.3);
+      --warn-dim: rgba(200, 140, 40, 0.1);
+      --warn-text: #c8a050;
+      --warn-border: rgba(200, 140, 40, 0.25);
+      --font-sans: 'IBM Plex Sans', sans-serif;
+      --font-mono: 'IBM Plex Mono', monospace;
+      --radius: 6px;
+      --radius-lg: 10px;
+    }
+    body {
+      font-family: var(--font-sans);
+      background: var(--bg);
+      color: var(--text-primary);
+      line-height: 1.6;
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+    .page { max-width: 860px; margin: 0 auto; }
+    .hero {
+      border: 1px solid var(--border);
+      border-top: 3px solid var(--accent);
+      border-radius: var(--radius-lg);
+      background: var(--surface);
+      padding: 2rem 2.25rem 1.75rem;
+      margin-bottom: 2rem;
+    }
+    .hero-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 0.6rem;
+    }
+    .hero h1 {
+      font-size: 26px;
+      font-weight: 500;
+      color: var(--text-primary);
+      line-height: 1.3;
+      margin-bottom: 0.75rem;
+    }
+    .hero p {
+      font-size: 14px;
+      color: var(--text-secondary);
+      line-height: 1.7;
+      max-width: 680px;
+    }
+    .section { margin-bottom: 2rem; }
+    .section-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.75rem;
+    }
+    .pill-grid { display: flex; flex-wrap: wrap; gap: 8px; }
+    .pill {
+      font-size: 13px;
+      padding: 5px 13px;
+      border-radius: 20px;
+      border: 1px solid var(--border);
+      background: var(--surface);
+      color: var(--text-secondary);
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .pill:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .q-list { display: flex; flex-direction: column; gap: 8px; }
+    .q-item {
+      font-size: 14px;
+      line-height: 1.55;
+      padding: 11px 15px 11px 42px;
+      border-radius: var(--radius);
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--text-secondary);
+      position: relative;
+      transition: border-color 0.15s;
+    }
+    .q-item::before {
+      content: '"';
+      position: absolute;
+      left: 14px;
+      top: 10px;
+      font-family: var(--font-mono);
+      font-size: 18px;
+      color: var(--accent);
+      line-height: 1;
+    }
+    .q-item:hover { border-color: var(--border-hover); color: var(--text-primary); }
+    .layer-tabs { display: flex; gap: 4px; flex-wrap: wrap; margin-bottom: 1px; }
+    .tab-btn {
+      font-family: var(--font-mono);
+      font-size: 12px;
+      padding: 7px 16px;
+      border-radius: var(--radius) var(--radius) 0 0;
+      border: 1px solid var(--border);
+      border-bottom: none;
+      background: var(--surface);
+      color: var(--text-tertiary);
+      cursor: pointer;
+      transition: background 0.15s, color 0.15s;
+      letter-spacing: 0.04em;
+    }
+    .tab-btn:hover { color: var(--text-secondary); background: var(--surface-2); }
+    .tab-btn.active {
+      background: var(--surface-2);
+      color: var(--accent);
+      border-color: var(--border);
+      border-bottom: 1px solid var(--surface-2);
+      position: relative;
+      z-index: 1;
+    }
+    .layer-card {
+      background: var(--surface-2);
+      border: 1px solid var(--border);
+      border-radius: 0 var(--radius-lg) var(--radius-lg) var(--radius-lg);
+      padding: 1.5rem 1.75rem;
+      display: none;
+    }
+    .layer-card.visible { display: block; }
+    .layer-title { font-size: 16px; font-weight: 500; margin-bottom: 0.4rem; }
+    .layer-desc {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.65;
+      margin-bottom: 1.25rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .layer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 1rem; }
+    .sub-card {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 0.9rem 1rem;
+    }
+    .sub-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-bottom: 0.5rem;
+    }
+    .sub-list { list-style: none; display: flex; flex-direction: column; gap: 5px; }
+    .sub-list li {
+      font-size: 13px;
+      color: var(--text-secondary);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .sub-list li::before {
+      content: '–';
+      position: absolute;
+      left: 0;
+      color: var(--text-tertiary);
+    }
+    .metrics-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      padding: 0.9rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 0.75rem;
+      align-items: center;
+    }
+    .metrics-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      margin-right: 4px;
+    }
+    .metric-pill {
+      font-family: var(--font-mono);
+      font-size: 11px;
+      padding: 4px 10px;
+      border-radius: 4px;
+      background: var(--info-dim);
+      color: var(--info);
+      border: 1px solid var(--info-border);
+    }
+    .tradeoff-box {
+      background: var(--warn-dim);
+      border: 1px solid var(--warn-border);
+      border-radius: var(--radius);
+      padding: 0.75rem 1rem;
+    }
+    .tradeoff-label {
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--warn-text);
+      margin-bottom: 0.4rem;
+    }
+    .tradeoff-list { list-style: none; display: flex; flex-direction: column; gap: 4px; }
+    .tradeoff-list li {
+      font-size: 13px;
+      color: var(--warn-text);
+      line-height: 1.5;
+      padding-left: 14px;
+      position: relative;
+    }
+    .tradeoff-list li::before {
+      content: '⚠';
+      position: absolute;
+      left: 0;
+      font-size: 10px;
+      top: 2px;
+    }
+    .compare-wrap {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+    }
+    .compare-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    .compare-table th {
+      text-align: left;
+      font-family: var(--font-mono);
+      font-size: 10px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--text-tertiary);
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      background: var(--surface-2);
+    }
+    .compare-table td {
+      padding: 10px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-secondary);
+      font-size: 13px;
+    }
+    .compare-table tr:last-child td { border-bottom: none; }
+    .compare-table td:first-child {
+      font-family: var(--font-mono);
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-primary);
+    }
+    .compare-table td:last-child { color: var(--accent); }
+    .compare-table tr:hover td { background: var(--surface-2); }
+    .insight {
+      border-left: 3px solid var(--accent);
+      padding: 1rem 1.25rem;
+      margin-top: 2rem;
+      background: var(--accent-dim);
+      border-radius: 0 var(--radius) var(--radius) 0;
+    }
+    .insight p {
+      font-size: 15px;
+      color: var(--text-primary);
+      line-height: 1.7;
+    }
+    @media (max-width: 600px) {
+      .layer-grid { grid-template-columns: 1fr; }
+      .hero { padding: 1.5rem 1.25rem; }
+      .hero h1 { font-size: 20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page" id="root"></div>
+  <script>
+    const pageData = {
+      hero: {
+        eyebrow: "MongoDB — sharded distributed database",
+        title: "Data distribution imbalance",
+        description: "Staff+/Principal-level guide covering hot shards, shard skew, uneven partition distribution, and shard key imbalance in MongoDB sharded clusters."
+      },
+      synonyms: [
+        "Hot shards",
+        "Shard skew",
+        "Uneven data distribution",
+        "Shard hotspotting",
+        "Uneven shard load",
+        "Low-cardinality shard key",
+        "Tenant hotspotting",
+        "Shard imbalance"
+      ],
+      questions: [
+        "Why is one shard consistently overloaded in my cluster?",
+        "How do I detect shard imbalance?",
+        "What causes one shard to have much more data?",
+        "Why is shard write latency variable?",
+        "How does shard key selection affect performance?",
+        "What causes tenant hotspotting in multi-tenant systems?",
+        "How do I rebalance uneven shard distribution?",
+        "Why is one shard disk filling faster?"
+      ],
+      layers: [
+        {
+          name: "Shard Key",
+          title: "Shard key design & cardinality",
+          description: "MongoDB distributes data based on the shard key. Poor shard key design (low cardinality, skewed values, monotonic sequences) causes some shards to contain disproportionately more data and requests.",
+          symptoms: ["One shard significantly larger than others", "One shard receiving more writes", "Uneven CPU across shards", "Chunks not splitting evenly"],
+          causes: ["Low-cardinality shard key (boolean, status)", "Monotonically increasing shard key (timestamps)", "Tenant hotspotting (one customer dominates)", "Poor cardinality estimation"],
+          effects: ["Hotspot shard becomes bottleneck", "Other shards underutilized", "Uneven resource distribution", "Cascading failures when hotspot overloaded"],
+          mitigations: ["Use compound shard key (tenant + ID)", "Add random prefix (salting) for hot keys", "Hash-based shard keys for distribution", "Redesign schema", "Use field-level sharding"],
+          metrics: ["Shard size distribution", "Document count per shard", "Write rate per shard", "Chunk count per shard", "P99 latency by shard"],
+          tradeoffs: ["Compound keys complicate queries", "Hashing makes range queries inefficient", "Salting increases key complexity"]
+        },
+        {
+          name: "Chunks",
+          title: "Chunk management & migration",
+          description: "MongoDB splits data into chunks and distributes across shards. Uneven chunk distribution or migration failures cause imbalance. Balancer oversees chunk movement.",
+          symptoms: ["Chunk count imbalanced", "Balancer not migrating chunks", "Chunks stuck on wrong shard", "Migrations failing"],
+          causes: ["Balancer disabled during growth", "Chunk size too large for rebalancing", "Network issues preventing migration", "Auto-split failures"],
+          effects: ["Chunks concentrated on few shards", "Rebalancing stalls", "Permanent imbalance", "Performance degradation"],
+          mitigations: ["Enable balancer during off-peak", "Tune chunk size appropriately", "Monitor balancer activity", "Implement manual rebalancing", "Fix network issues"],
+          metrics: ["Chunk distribution by shard", "Balancer activity rate", "Migration success rate", "Chunk size", "Rebalance time"],
+          tradeoffs: ["Rebalancing causes I/O overhead", "Smaller chunks increase move overhead", "Manual balancing requires expertise"]
+        },
+        {
+          name: "Zones",
+          title: "Zone sharding & replica placement",
+          description: "Zone sharding allows controlling which chunks live on which shards based on shard key ranges. Misconfigured zones cause imbalance by concentrating ranges on few shards.",
+          symptoms: ["All write traffic on one zone", "Uneven zone allocation", "Replica placement imbalanced", "Zone enforcement not working"],
+          causes: ["Zone configuration too narrow", "Zone tags not properly assigned", "Range-based sharding creating skew", "Replica set imbalance"],
+          effects: ["Zone becomes bottleneck", "Other zones underutilized", "Replication imbalance", "Cascading zone failure"],
+          mitigations: ["Rebalance zone boundaries", "Assign tags correctly", "Monitor zone metrics", "Implement multi-zone writes", "Spread ranges evenly"],
+          metrics: ["Chunk distribution by zone", "Request rate per zone", "Latency by zone", "Replication lag", "Zone utilization"],
+          tradeoffs: ["Zone rebalancing causes migration", "Frequent zone changes disrupt queries", "Complex zone logic is hard to debug"]
+        },
+        {
+          name: "Workload",
+          title: "Uneven query workload distribution",
+          description: "Even with balanced data, queries can be uneven if applications query certain shard key ranges more frequently. Query patterns matter as much as data distribution.",
+          symptoms: ["One shard CPU high despite balanced data", "Query latency variable by shard", "Specific documents accessed frequently", "Hot document list visible"],
+          causes: ["Application query pattern bias", "Cache locality from application", "Popular data concentrated in ranges", "Time-series workload skew"],
+          effects: ["Hotspot shard limits throughput", "Other shards underutilized", "Tail latency from hotspot", "Cascading application impact"],
+          mitigations: ["Cache hot data externally", "Denormalize for access patterns", "Implement application-level sharding", "Use read preference", "Monitor query patterns"],
+          metrics: ["Query rate per shard", "CPU per shard", "Memory per shard", "Hot key detection", "Query distribution"],
+          tradeoffs: ["External caching adds latency", "Denormalization increases storage", "Application sharding adds complexity"]
+        }
+      ],
+      comparisons: [
+        { tech: "Cassandra", problem: "Hot partitions" },
+        { tech: "DynamoDB", problem: "Partition key hotspotting" },
+        { tech: "Elasticsearch", problem: "Hot shards" },
+        { tech: "PostgreSQL", problem: "Uneven partition distribution" },
+        { tech: "Kafka", problem: "Uneven partition load" }
+      ],
+      insight: "MongoDB shard distribution imbalance is fundamentally a shard key problem. Unlike query optimization which can improve performance incrementally, a poor shard key causes structural imbalance that no amount of tuning can fix. Strong engineers understand shard key design before deployment, considering cardinality, monotonicity, and query patterns. The mantra: the shard key is chosen once and never changed easily. Get it right the first time."
+    };
+
+    function renderPage() {
+      const root = document.getElementById('root');
+      let html = `<div class="hero"><p class="hero-eyebrow">${pageData.hero.eyebrow}</p><h1>${pageData.hero.title}</h1><p>${pageData.hero.description}</p></div><div class="section"><p class="section-label">Common synonyms</p><div class="pill-grid">${pageData.synonyms.map(s => `<span class="pill">${s}</span>`).join('')}</div></div><div class="section"><p class="section-label">How interviewers phrase this</p><div class="q-list">${pageData.questions.map(q => `<div class="q-item">${q}</div>`).join('')}</div></div><div class="section"><p class="section-label">Layer-by-layer breakdown</p><div class="layer-tabs">${pageData.layers.map((l, i) => `<button class="tab-btn ${i === 0 ? 'active' : ''}" onclick="showLayer(${i})">${l.name}</button>`).join('')}</div>${pageData.layers.map((layer, idx) => `<div class="layer-card ${idx === 0 ? 'visible' : ''}" id="layer-${idx}"><p class="layer-title">${layer.title}</p><p class="layer-desc">${layer.description}</p><div class="layer-grid"><div class="sub-card"><p class="sub-label">Observable symptoms</p><ul class="sub-list">${layer.symptoms.map(s => `<li>${s}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Root causes</p><ul class="sub-list">${layer.causes.map(c => `<li>${c}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">System effects</p><ul class="sub-list">${layer.effects.map(e => `<li>${e}</li>`).join('')}</ul></div><div class="sub-card"><p class="sub-label">Mitigations</p><ul class="sub-list">${layer.mitigations.map(m => `<li>${m}</li>`).join('')}</ul></div></div><div class="metrics-row"><span class="metrics-label">Key metrics</span>${layer.metrics.map(m => `<span class="metric-pill">${m}</span>`).join('')}</div><div class="tradeoff-box"><p class="tradeoff-label">Tradeoffs</p><ul class="tradeoff-list">${layer.tradeoffs.map(t => `<li>${t}</li>`).join('')}</ul></div></div>`).join('')}</div><div class="section"><p class="section-label">Universal distributed systems pattern</p><div class="compare-wrap"><table class="compare-table"><thead><tr><th>Technology</th><th>Equivalent problem</th></tr></thead><tbody>${pageData.comparisons.map(c => `<tr><td>${c.tech}</td><td>${c.problem}</td></tr>`).join('')}</tbody></table></div></div><div class="insight"><p>${pageData.insight}</p></div>`;
+      root.innerHTML = html;
+    }
+
+    function showLayer(idx) {
+      document.querySelectorAll('.layer-card').forEach((c, i) => {
+        c.classList.toggle('visible', i === idx);
+      });
+      document.querySelectorAll('.tab-btn').forEach((b, i) => {
+        b.classList.toggle('active', i === idx);
+      });
+    }
+
+    renderPage();
+  </script>
+</body>
+</html>
