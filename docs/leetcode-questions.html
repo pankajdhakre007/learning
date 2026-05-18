@@ -3,23 +3,22 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>LeetCode — Algorithm Problems by Category</title>
+  <title>LeetCode — Algorithm Problems by Category — Learning Docs</title>
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body>
+<body class="page-leetcode">
   <main class="page-shell">
     <header class="site-header">
       <div class="brand">
         <h1 class="brand-title">Algorithm Problems by Category</h1>
+        <p class="brand-subtitle">Senior-track problems across arrays, trees, graphs, and dynamic programming.</p>
       </div>
-      <a class="button button-icon" href="index.html" aria-label="Go back to home" title="Back">
+      <a class="button button-icon" href="index.html" aria-label="Back to home" title="Back to home">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
           <path d="M15 18l-6-6 6-6" />
         </svg>
       </a>
     </header>
-
-    <p style="max-width: 720px; margin: 0 0 24px; color: var(--text-secondary);">Senior-track problems across arrays, trees, graphs, and dynamic programming.</p>
 
     <div class="docs-layout">
       <aside class="sidebar">
@@ -45,20 +44,20 @@
 
         <div class="stats">
           <article class="card">
-            <h4>Total Categories</h4>
-            <p id="categoryCount">15</p>
+            <h4 class="card-title">Total Categories</h4>
+            <p class="card-value" id="categoryCount">15</p>
           </article>
           <article class="card">
-            <h4>Total Questions</h4>
-            <p id="questionCount">0</p>
+            <h4 class="card-title">Total Questions</h4>
+            <p class="card-value" id="questionCount">0</p>
           </article>
           <article class="card">
-            <h4>Medium Questions</h4>
-            <p id="mediumCount">0</p>
+            <h4 class="card-title">Medium Questions</h4>
+            <p class="card-value" id="mediumCount">0</p>
           </article>
           <article class="card">
-            <h4>Hard Questions</h4>
-            <p id="hardCount">0</p>
+            <h4 class="card-title">Hard Questions</h4>
+            <p class="card-value" id="hardCount">0</p>
           </article>
         </div>
 
@@ -72,14 +71,13 @@
           <input class="search-box" id="searchInput" type="search" placeholder="Search problem, pattern, category…" aria-label="Search problems" />
         </div>
 
-        <div id="content"></div>
-        <p class="footer">Built for Staff / Principal Software Engineer interview preparation.</p>
+        <div class="docs-content" id="content"></div>
       </section>
     </div>
 
     <footer class="site-footer">
-      <span>Docs package navigation</span>
-      <span>Shared CSS and scripts are loaded from <code>assets/</code></span>
+      <span class="site-footer-note">Algorithm practice for senior engineering interviews</span>
+      <span class="site-footer-meta">Last updated May 2026</span>
     </footer>
   </main>
 

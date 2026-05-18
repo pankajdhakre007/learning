@@ -12,10 +12,12 @@
   --soft-border: rgba(148, 163, 184, 0.12);
   --primary: #60a5fa;
   --primary-strong: #2563eb;
+  --text-primary: #e2e8f0;
   --text-muted: #cbd5e1;
   --text-secondary: #94a3b8;
   --radius: 14px;
   --shadow: 0 24px 70px rgba(15, 23, 42, 0.25);
+  --font-mono: ui-monospace, 'Courier New', monospace;
 }
 
 * {
@@ -86,12 +88,6 @@ button {
   box-shadow: 0 18px 40px rgba(15, 23, 42, 0.16);
 }
 
-.home-header {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 12px;
-}
-
 .brand {
   display: flex;
   flex-direction: column;
@@ -103,27 +99,15 @@ button {
   line-height: 1.05;
 }
 
-.brand-subtitle {
+.brand-subtitle,
+.page-subtitle {
   color: var(--text-muted);
-  max-width: 640px;
+  line-height: 1.55;
 }
 
-.page-intro,
-.section-panel,
-.hero-panel {
-  background: rgba(15, 23, 42, 0.9);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow);
-  backdrop-filter: blur(18px);
-  padding: 22px;
-}
-
-.hero-panel {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  align-items: center;
-  gap: 18px;
+.page-content-narrow {
+  width: min(920px, 100%);
+  margin: 0 auto;
 }
 
 .eyebrow {
@@ -135,19 +119,15 @@ button {
 }
 
 .hero-copy {
-  max-width: 680px;
+  max-width: 860px;
   color: var(--text-muted);
-  line-height: 1.5;
+  line-height: 1.55;
 }
 
 .nav-grid {
   display: grid;
   gap: 14px;
   grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-}
-
-.home-grid .nav-card {
-  min-height: 150px;
 }
 
 .nav-card,
@@ -173,44 +153,13 @@ button {
   font-weight: 700;
 }
 
-.nav-card-copy,
-.card-copy {
+.nav-card-copy {
   color: var(--text-muted);
   line-height: 1.5;
 }
 
-.meta {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-}
-
-.section-title {
-  font-size: 1.35rem;
-  color: #0f172a;
-}
-
-.disclaimer {
-  color: var(--text-muted);
-  line-height: 1.8;
-}
-
-.button {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.95rem 1.4rem;
-  border-radius: 14px;
-  border: 1px solid transparent;
-  background: rgba(37, 99, 235, 0.95);
-  color: white;
-  font-weight: 700;
-  transition: background 0.25s ease, transform 0.2s ease, box-shadow 0.2s ease;
-}
-
-.button:hover {
-  background: #2563eb;
-  transform: translateY(-1px);
-  box-shadow: 0 16px 30px rgba(37, 99, 235, 0.18);
+.home-grid .nav-card {
+  min-height: 150px;
 }
 
 .site-footer {
@@ -218,6 +167,15 @@ button {
   border-top: 1px solid var(--border);
   color: var(--text-secondary);
   font-size: 0.95rem;
+}
+
+.site-footer-note,
+.site-footer-meta {
+  color: inherit;
+}
+
+.site-footer-meta {
+  font-variant-numeric: tabular-nums;
 }
 
 @media (max-width: 860px) {
@@ -322,21 +280,19 @@ button {
   grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
 }
 
-.card {
-  background: rgba(15, 23, 42, 0.92);
-  border: 1px solid rgba(148, 163, 184, 0.16);
-}
-
-.card h4 {
+.card-title {
   color: var(--text-secondary);
   font-size: 0.9rem;
   margin-bottom: 8px;
+  font-weight: 600;
+  line-height: 1.3;
 }
 
-.card p {
+.card-value {
   font-size: 1.75rem;
   font-weight: 700;
   color: white;
+  line-height: 1.1;
 }
 
 .filters {
@@ -383,8 +339,7 @@ button {
   color: white;
 }
 
-.question-count,
-.page-meta {
+.question-count {
   color: var(--text-secondary);
   font-size: 0.95rem;
 }
@@ -484,11 +439,6 @@ tbody tr:hover {
   fill: none;
 }
 
-.footer {
-  color: var(--text-secondary);
-  font-size: 0.95rem;
-}
-
 @media (max-width: 900px) {
   .docs-layout {
     grid-template-columns: 1fr;
@@ -513,7 +463,6 @@ tbody tr:hover {
    Tech Issues Page Styles
    ======================================== */
 
-/* Tech issues pages use the same uniform design system as all other pages */
 .tech-issue-page {
   padding: 2rem 1rem 4rem;
 }
@@ -534,7 +483,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .hero-eyebrow {
-  font-family: ui-monospace, 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -562,7 +511,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .section-label {
-  font-family: ui-monospace, 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -616,7 +565,7 @@ tbody tr:hover {
   position: absolute;
   left: 14px;
   top: 10px;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 20px;
   color: var(--primary);
   line-height: 1;
@@ -636,7 +585,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .tab-btn {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   font-weight: 600;
   padding: 10px 18px;
@@ -714,7 +663,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .sub-label {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -758,7 +707,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .metrics-label {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -768,7 +717,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .metric-pill {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   font-weight: 600;
   padding: 5px 11px;
@@ -786,7 +735,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .tradeoff-label {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -834,7 +783,7 @@ tbody tr:hover {
 
 .tech-issue-page .compare-table th {
   text-align: left;
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -857,7 +806,7 @@ tbody tr:hover {
 }
 
 .tech-issue-page .compare-table td:first-child {
-  font-family: ui-monospace, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 600;
   color: #e2e8f0;
@@ -928,7 +877,7 @@ tbody tr:hover {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 22px 22px;
+  padding: 20px 22px;
   border-radius: var(--radius);
   background: rgba(15, 23, 42, 0.9);
   border: 1px solid var(--border);
@@ -942,19 +891,26 @@ tbody tr:hover {
 }
 
 .tech-header .eyebrow {
-  font-family: ui-monospace, 'Courier New', monospace;
-  font-size: 10px;
-  letter-spacing: 0.12em;
+  font-size: 0.78rem;
+  letter-spacing: 0.24em;
   text-transform: uppercase;
-  color: var(--text-secondary);
+  color: var(--primary);
   font-weight: 600;
+  margin: 0;
 }
 
+.tech-header .brand-title,
 .tech-header h1 {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: clamp(1.6rem, 2.8vw, 2.3rem);
+  font-weight: 700;
   color: #e2e8f0;
   margin: 0;
+  line-height: 1.08;
+}
+
+.tech-header .brand-subtitle {
+  color: var(--text-muted);
+  line-height: 1.5;
 }
 
 .tech-sidebar {
@@ -973,7 +929,7 @@ tbody tr:hover {
 }
 
 .sidebar-title {
-  font-family: ui-monospace, 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   letter-spacing: 0.12em;
   text-transform: uppercase;
@@ -1011,7 +967,7 @@ tbody tr:hover {
 }
 
 .tech-group-pill {
-  font-family: ui-monospace, 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1080,7 +1036,7 @@ tbody tr:hover {
 }
 
 .nav-item-tag {
-  font-family: ui-monospace, 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
@@ -1135,25 +1091,9 @@ tbody tr:hover {
   to { transform: rotate(360deg); }
 }
 
-.tech-issues-shell .button-icon {
-  width: 40px;
-  height: 40px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: 8px;
-  border: 1px solid var(--border);
-  background: var(--surface-alt);
-  color: var(--text-muted);
-  cursor: pointer;
-  transition: all 0.15s ease;
-  text-decoration: none;
-}
-
-.tech-issues-shell .button-icon:hover {
-  border-color: var(--primary);
-  background: rgba(96, 165, 250, 0.08);
-  color: var(--primary);
+.tech-container .site-footer {
+  grid-column: 1 / -1;
+  padding-top: 12px;
 }
 
 @media (max-width: 1024px) {
@@ -1181,4 +1121,297 @@ tbody tr:hover {
   .tech-content {
     min-height: 66vh;
   }
+}
+
+
+/* ========================================
+   Technology Comparison Page
+   ======================================== */
+
+.tech-comparison-page .page-layout {
+  display: grid;
+  grid-template-columns: 280px minmax(0, 1fr);
+  gap: 24px;
+  align-items: start;
+}
+
+.tech-comparison-page .legend-section {
+  position: sticky;
+  top: 24px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  height: fit-content;
+  max-height: calc(100vh - 100px);
+  overflow-y: auto;
+}
+
+.tech-comparison-page .legend-section h2 {
+  font-size: 1.1rem;
+  margin-bottom: 18px;
+  color: #e2e8f0;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tech-comparison-page .legend-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 16px;
+}
+
+.tech-comparison-page .legend-category h3 {
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+  color: var(--text-muted);
+  border-bottom: 1px solid rgba(99, 102, 241, 0.2);
+  padding-bottom: 8px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.tech-comparison-page .legend-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 8px;
+  padding: 6px 0;
+}
+
+.tech-comparison-page .legend-color {
+  width: 20px;
+  height: 20px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.tech-comparison-page .legend-color.is-low,
+.tech-comparison-page .legend-color.is-excellent { background: #6ee7b7; }
+.tech-comparison-page .legend-color.is-medium,
+.tech-comparison-page .legend-color.is-good { background: #facc15; }
+.tech-comparison-page .legend-color.is-high,
+.tech-comparison-page .legend-color.is-moderate { background: #f87171; }
+
+.tech-comparison-page .legend-text {
+  font-size: 0.85rem;
+  color: var(--text-secondary);
+  line-height: 1.4;
+}
+
+.tech-comparison-page .legend-text strong {
+  color: #e2e8f0;
+  display: block;
+  font-size: 0.8rem;
+  font-weight: 700;
+}
+
+.tech-comparison-page .comparison-grid {
+  display: grid;
+  gap: 24px;
+}
+
+.tech-comparison-page .tech-section {
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+}
+
+.tech-comparison-page .tech-section h2 {
+  font-size: 1.35rem;
+  margin-bottom: 18px;
+  color: #e2e8f0;
+  border-bottom: 2px solid rgba(99, 102, 241, 0.3);
+  padding-bottom: 12px;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.tech-comparison-page .comparison-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.92rem;
+}
+
+.tech-comparison-page .comparison-table th {
+  background: rgba(99, 102, 241, 0.16);
+  color: #e2e8f0;
+  padding: 12px;
+  text-align: left;
+  font-weight: 700;
+  border: 1px solid var(--border);
+  cursor: pointer;
+  user-select: none;
+  position: relative;
+  transition: background 0.2s ease;
+  line-height: 1.3;
+}
+
+.tech-comparison-page .comparison-table th:hover {
+  background: rgba(99, 102, 241, 0.24);
+}
+
+.tech-comparison-page .comparison-table th.sortable::after {
+  content: ' ⇅';
+  font-size: 0.85rem;
+  opacity: 0.5;
+}
+
+.tech-comparison-page .comparison-table th.sort-asc::after {
+  content: ' ↑';
+  opacity: 1;
+  color: #6ee7b7;
+}
+
+.tech-comparison-page .comparison-table th.sort-desc::after {
+  content: ' ↓';
+  opacity: 1;
+  color: #f87171;
+}
+
+.tech-comparison-page .comparison-table td {
+  padding: 12px;
+  border: 1px solid var(--soft-border);
+  color: var(--text-muted);
+  line-height: 1.4;
+}
+
+.tech-comparison-page .comparison-table tr:hover {
+  background: rgba(99, 102, 241, 0.08);
+}
+
+.tech-comparison-page .tech-name {
+  font-weight: 700;
+  color: #e2e8f0;
+  min-width: 140px;
+}
+
+.tech-comparison-page .latency-low,
+.tech-comparison-page .throughput-excellent { color: #6ee7b7; font-weight: 600; }
+.tech-comparison-page .latency-medium,
+.tech-comparison-page .throughput-good { color: #facc15; font-weight: 600; }
+.tech-comparison-page .latency-high,
+.tech-comparison-page .throughput-moderate { color: #f87171; font-weight: 600; }
+
+.tech-comparison-page .metric-label {
+  color: var(--text-secondary);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 900px) {
+  .tech-comparison-page .page-layout {
+    grid-template-columns: 1fr;
+  }
+
+  .tech-comparison-page .legend-section {
+    position: static;
+    max-height: none;
+  }
+
+  .tech-comparison-page .comparison-table {
+    font-size: 0.85rem;
+  }
+
+  .tech-comparison-page .comparison-table th,
+  .tech-comparison-page .comparison-table td {
+    padding: 8px;
+  }
+}
+
+/* ========================================
+   Fulfillment Load Comparison Page
+   ======================================== */
+
+.fulfillment-page .flc-intro {
+  margin: 0 0 24px;
+}
+
+.fulfillment-page .flc-table-wrap {
+  border: 1px solid var(--soft-border);
+  border-radius: 12px;
+  overflow: hidden;
+  margin-top: 24px;
+}
+
+.fulfillment-page .flc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.875rem;
+}
+
+.fulfillment-page .flc-table thead tr { background: rgba(15, 23, 42, 0.85); }
+
+.fulfillment-page .flc-table thead th {
+  padding: 12px 16px;
+  text-align: left;
+  font-size: 0.7rem;
+  font-weight: 700;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  border-bottom: 1px solid var(--border);
+  line-height: 1.3;
+}
+
+.fulfillment-page .flc-table thead th:not(:first-child) { text-align: right; }
+
+.fulfillment-page .flc-table tbody tr { border-bottom: 1px solid var(--soft-border); }
+.fulfillment-page .flc-table tbody tr:last-child { border-bottom: none; }
+.fulfillment-page .flc-table tbody tr:hover { background: rgba(255, 255, 255, 0.03); }
+
+.fulfillment-page .flc-table tbody tr.row-separator td {
+  padding: 0;
+  height: 1px;
+  background: var(--border);
+}
+
+.fulfillment-page .flc-table td {
+  padding: 13px 16px;
+  color: #e2e8f0;
+  vertical-align: middle;
+  line-height: 1.4;
+}
+
+.fulfillment-page .flc-table td:not(:first-child) {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.fulfillment-page .flc-table td.label { font-weight: 600; color: #f1f5f9; }
+
+.fulfillment-page .flc-table td.note {
+  font-size: 0.75rem;
+  font-style: italic;
+  color: var(--text-secondary);
+  padding-top: 2px;
+  padding-bottom: 11px;
+}
+
+.fulfillment-page .val-regular { color: var(--text-secondary); }
+.fulfillment-page .val-event   { color: var(--primary); font-weight: 600; }
+
+.fulfillment-page .badge {
+  display: inline-block;
+  font-size: 0.7rem;
+  font-weight: 700;
+  border-radius: 999px;
+  padding: 2px 8px;
+  margin-left: 4px;
+  vertical-align: middle;
+  border: 1px solid transparent;
+  background: transparent;
+  color: inherit;
+}
+
+.fulfillment-page .badge.up {
+  background: rgba(74, 222, 128, 0.12);
+  color: #4ade80;
+  border-color: rgba(74, 222, 128, 0.28);
+}
+
+.fulfillment-page .badge.flat {
+  background: rgba(148, 163, 184, 0.1);
+  color: var(--text-secondary);
+  border-color: rgba(148, 163, 184, 0.2);
 }

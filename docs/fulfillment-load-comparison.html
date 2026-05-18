@@ -3,107 +3,23 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fulfillment Load — Regular Day vs. Annual Event</title>
+  <title>Fulfillment Load — Regular Day vs. Annual Event — Learning Docs</title>
   <link rel="stylesheet" href="assets/css/site.css" />
-  <style>
-    .flc-table-wrap {
-      border: 1px solid var(--soft-border);
-      border-radius: 12px;
-      overflow: hidden;
-      margin-top: 24px;
-    }
-
-    .flc-table {
-      width: 100%;
-      border-collapse: collapse;
-      font-size: 14px;
-    }
-
-    .flc-table thead tr { background: rgba(15, 23, 42, 0.85); }
-
-    .flc-table thead th {
-      padding: 12px 16px;
-      text-align: left;
-      font-size: 11px;
-      font-weight: 700;
-      letter-spacing: 0.09em;
-      text-transform: uppercase;
-      color: var(--text-secondary);
-      border-bottom: 1px solid var(--border);
-    }
-
-    .flc-table thead th:not(:first-child) { text-align: right; }
-
-    .flc-table tbody tr { border-bottom: 1px solid var(--soft-border); }
-    .flc-table tbody tr:last-child { border-bottom: none; }
-    .flc-table tbody tr:hover { background: rgba(255,255,255,0.03); }
-
-    .flc-table tbody tr.row-separator td {
-      padding: 0;
-      height: 1px;
-      background: var(--border);
-    }
-
-    .flc-table td {
-      padding: 13px 16px;
-      color: #e2e8f0;
-      vertical-align: middle;
-    }
-
-    .flc-table td:not(:first-child) {
-      text-align: right;
-      font-variant-numeric: tabular-nums;
-    }
-
-    .flc-table td.label { font-weight: 600; color: #f1f5f9; }
-
-    .flc-table td.note {
-      font-size: 12px;
-      font-style: italic;
-      color: var(--text-secondary);
-      padding-top: 2px;
-      padding-bottom: 11px;
-    }
-
-    .val-regular { color: #94a3b8; }
-    .val-event   { color: #60a5fa; font-weight: 600; }
-
-    .badge {
-      display: inline-block;
-      font-size: 11px;
-      font-weight: 700;
-      border-radius: 999px;
-      padding: 2px 8px;
-      margin-left: 4px;
-      vertical-align: middle;
-    }
-
-    .up {
-      background: rgba(74,222,128,0.12);
-      color: #4ade80;
-      border: 1px solid rgba(74,222,128,0.28);
-    }
-
-    .flat {
-      background: rgba(148,163,184,0.1);
-      color: #94a3b8;
-      border: 1px solid rgba(148,163,184,0.2);
-    }
-  </style>
 </head>
-<body>
+<body class="fulfillment-page">
   <main class="page-shell">
     <header class="site-header">
       <div class="brand">
         <h1 class="brand-title">Fulfillment Load — Regular Day vs. Annual Event</h1>
+        <p class="brand-subtitle">Order volume, transaction counts, and event-day deltas for regular demand versus peak annual event load.</p>
       </div>
-      <a class="button button-icon" href="index.html" aria-label="Back to home" title="Back">
+      <a class="button button-icon" href="index.html" aria-label="Back to home" title="Back to home">
         <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path d="M15 18l-6-6 6-6" /></svg>
       </a>
     </header>
 
-    <div style="max-width:780px; margin:0 auto; padding:32px 24px 80px;">
-      <p style="font-size:13px; color:var(--text-secondary); margin-bottom:0;">
+    <div class="page-content-narrow">
+      <p class="page-subtitle flc-intro">
         BF/CM = Black Friday / Cyber Monday. % change shows expected load increase on event days.
       </p>
 
@@ -179,8 +95,8 @@
     </div>
 
     <footer class="site-footer">
-      <span>US Online Fulfillment — internal reference</span>
-      <span>Last updated May 2026</span>
+      <span class="site-footer-note">Annual-event fulfillment load reference</span>
+      <span class="site-footer-meta">Last updated May 2026</span>
     </footer>
   </main>
 </body>

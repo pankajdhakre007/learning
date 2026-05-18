@@ -3,18 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>System Design Interview Hub</title>
+  <title>System Design Interview Hub — Learning Docs</title>
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body>
-  <main class="page-shell page-home">
-    <section class="hero-panel">
-      <div>
+<body class="page-home">
+  <main class="page-shell">
+    <header class="site-header">
+      <div class="brand">
         <p class="eyebrow">Interview Preparation</p>
         <h1 class="brand-title">System Design Interview Hub</h1>
-        <p class="hero-copy">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+        <p class="brand-subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
       </div>
-    </section>
+    </header>
 
     <section class="nav-grid home-grid">
       <article class="nav-card">
@@ -25,13 +25,13 @@
 
       <article class="nav-card">
         <div class="nav-card-title">Technology Comparison</div>
-        <p class="nav-card-copy">Throughput and latency benchmarks across databases, caches, messaging, and infrastructure technologies.</p>
+        <p class="nav-card-copy">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
         <a class="button" href="technology-comparison.html">View Comparison</a>
       </article>
 
       <article class="nav-card">
         <div class="nav-card-title">Tech Issues &amp; Resolutions</div>
-        <p class="nav-card-copy">Production failure modes and remediation playbooks across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateways.</p>
+        <p class="nav-card-copy">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
         <a class="button" href="tech-issues.html">Browse Topics</a>
       </article>
 
@@ -41,6 +41,11 @@
         <a class="button" href="fulfillment-load-comparison.html">View Comparison</a>
       </article>
     </section>
+
+    <footer class="site-footer">
+      <span class="site-footer-note">Curated system design and interview preparation resources</span>
+      <span class="site-footer-meta">Last updated May 2026</span>
+    </footer>
   </main>
 </body>
 </html>
