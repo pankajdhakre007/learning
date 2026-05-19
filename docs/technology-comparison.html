@@ -3,318 +3,352 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Technology Benchmarks — Throughput & Latency — Learning Docs</title>
-  <link rel="stylesheet" href="assets/css/site.css" />
-</head>
-<body class="page-comparison">
-  <main class="page-shell">
-    <header class="site-header">
-      <div class="brand">
-        <p class="eyebrow">Infrastructure Benchmarks</p>
-        <h1 class="brand-title">Technology Benchmarks</h1>
-        <p class="brand-subtitle">Reads/sec, writes/sec, and latency ranges across databases, caches, message queues, gateways, and related infrastructure.</p>
-      </div>
-      <a class="button button--icon" href="index.html" aria-label="Back to home" title="Back to home">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </a>
-    </header>
+  <link rel="preconnect" href="https://rsms.me" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
 
-    <div class="split-layout">
-      <section class="panel panel--sticky">
-      <h2>Color Legend</h2>
-      <div class="legend-grid">
-        <div class="legend-category">
-          <h3>Latency Ranges</h3>
-          <div class="legend-item">
-            <div class="swatch swatch--success"></div>
-            <span class="legend-text"><strong>Low:</strong> 0.1–10 ms (excellent)</span>
+  <title>Technology Benchmarks — Throughput & Latency — Learning Docs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/bulma-overrides.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/utilities.css" />
+</head>
+<body>
+  <nav class="navbar topbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <span class="brand-mark"><span class="brand-dot" aria-hidden="true"></span><strong>Learning Hub</strong></span>
+        </a>
+      </div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <a class="navbar-item" href="leetcode-questions.html">LeetCode</a>
+          <a class="navbar-item" href="technology-comparison.html" aria-current="page">Benchmarks</a>
+          <a class="navbar-item" href="tech-issues.html">Tech Issues</a>
+          <a class="navbar-item" href="fulfillment-load-comparison.html">Fulfillment</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <a class="skip-link" href="#main">Skip to content</a>
+    <header class="page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <div class="page-header__meta">
+            <p class="heading">Infrastructure Benchmarks</p>
+            <h1 class="title">Technology Benchmarks</h1>
+            <p class="subtitle">Reads/sec, writes/sec, and latency ranges across databases, caches, message queues, gateways, and related infrastructure.</p>
           </div>
-          <div class="legend-item">
-            <div class="swatch swatch--warn"></div>
-            <span class="legend-text"><strong>Medium:</strong> 10–100 ms (acceptable)</span>
-          </div>
-          <div class="legend-item">
-            <div class="swatch swatch--danger"></div>
-            <span class="legend-text"><strong>High:</strong> 100+ ms (batch/stream)</span>
+          <div class="page-header__actions">
+            <a class="button is-light" href="index.html">Back</a>
           </div>
         </div>
+      </div>
+    </header>
 
-        <div class="legend-category">
-          <h3>Throughput Ranges</h3>
-          <div class="legend-item">
-            <div class="swatch swatch--success"></div>
-            <span class="legend-text"><strong>Excellent:</strong> 100K+ ops/sec</span>
-          </div>
-          <div class="legend-item">
-            <div class="swatch swatch--warn"></div>
-            <span class="legend-text"><strong>Good:</strong> 10K–100K ops/sec</span>
-          </div>
-          <div class="legend-item">
-            <div class="swatch swatch--danger"></div>
-            <span class="legend-text"><strong>Moderate:</strong> 1K–10K ops/sec</span>
+    <section class="section" id="main">
+      <div class="container">
+        <div class="columns">
+          <aside class="column is-one-quarter">
+            <div class="box">
+              <h2 class="sidebar-title">Color Legend</h2>
+              
+              <h3 class="sidebar-subtitle">Latency Ranges</h3>
+              <div class="legend u-mb-5" aria-label="Latency legend">
+                <div class="legend-row"><span class="swatch is-success" aria-hidden="true"></span><span>Low: 0.1-10 ms</span></div>
+                <div class="legend-row"><span class="swatch is-warning" aria-hidden="true"></span><span>Medium: 10-100 ms</span></div>
+                <div class="legend-row"><span class="swatch is-danger" aria-hidden="true"></span><span>High: 100+ ms</span></div>
+              </div>
+
+              <h3 class="sidebar-subtitle">Throughput Ranges</h3>
+              <div class="legend" aria-label="Throughput legend">
+                <div class="legend-row"><span class="swatch is-success" aria-hidden="true"></span><span>Excellent: 100K+</span></div>
+                <div class="legend-row"><span class="swatch is-warning" aria-hidden="true"></span><span>Good: 10K-100K</span></div>
+                <div class="legend-row"><span class="swatch is-danger" aria-hidden="true"></span><span>Moderate: 1K-10K</span></div>
+              </div>
+            </div>
+          </aside>
+
+          <div class="column">
+            <!-- Core Systems -->
+            <div class="box">
+              <h2 class="hub-card__title">Core Systems</h2>
+              <div class="table-container">
+                <table class="table is-striped is-hoverable is-fullwidth" data-table="benchmarks" data-section="core">
+                  <thead>
+                    <tr>
+                      <th>Technology</th>
+                      <th>Writes/sec</th>
+                      <th>Reads/sec</th>
+                      <th>Read Latency</th>
+                      <th>Write Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Redis</strong></td>
+                      <td>100K – 1M+</td>
+                      <td>100K – 1M+</td>
+                      <td><span class="tag is-success is-light">0.1–0.5 ms</span></td>
+                      <td><span class="tag is-success is-light">0.1–0.7 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Elasticsearch</strong></td>
+                      <td>5K – 50K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">5–50 ms</span></td>
+                      <td><span class="tag is-warning is-light">10–100 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Kafka</strong></td>
+                      <td>100K – 1M+</td>
+                      <td>100K – 1M+</td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                      <td><span class="tag is-success is-light">2–10 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Cassandra</strong></td>
+                      <td>50K – 500K</td>
+                      <td>20K – 200K</td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                      <td><span class="tag is-success is-light">2–10 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>DynamoDB</strong></td>
+                      <td>100K – millions+</td>
+                      <td>100K – millions+</td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>PostgreSQL</strong></td>
+                      <td>5K – 50K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                      <td><span class="tag is-warning is-light">2–20 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Flink</strong></td>
+                      <td>100K – 10M+</td>
+                      <td>100K – 10M+</td>
+                      <td><span class="tag is-danger is-light">10–1000 ms</span></td>
+                      <td><span class="tag is-danger is-light">10–1000 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>ZooKeeper</strong></td>
+                      <td>1K – 10K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- API Gateways -->
+            <div class="box">
+              <h2 class="hub-card__title">API Gateways</h2>
+              <div class="table-container">
+                <table class="table is-striped is-hoverable is-fullwidth" data-table="benchmarks" data-section="gateways">
+                  <thead>
+                    <tr>
+                      <th>Technology</th>
+                      <th>Writes/sec</th>
+                      <th>Reads/sec</th>
+                      <th>Read Latency</th>
+                      <th>Write Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Amazon API Gateway</strong></td>
+                      <td>10K – 100K+</td>
+                      <td>10K – 100K+</td>
+                      <td><span class="tag is-warning is-light">10–50 ms</span></td>
+                      <td><span class="tag is-warning is-light">10–50 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Kong</strong></td>
+                      <td>20K – 200K</td>
+                      <td>20K – 200K</td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                      <td><span class="tag is-success is-light">1–10 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>NGINX</strong></td>
+                      <td>50K – 500K+</td>
+                      <td>50K – 500K+</td>
+                      <td><span class="tag is-success is-light">0.5–5 ms</span></td>
+                      <td><span class="tag is-success is-light">0.5–5 ms</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Load Balancers -->
+            <div class="box">
+              <h2 class="hub-card__title">Load Balancers</h2>
+              <div class="table-container">
+                <table class="table is-striped is-hoverable is-fullwidth" data-table="benchmarks" data-section="balancers">
+                  <thead>
+                    <tr>
+                      <th>Technology</th>
+                      <th>Writes/sec</th>
+                      <th>Reads/sec</th>
+                      <th>Read Latency</th>
+                      <th>Write Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>HAProxy</strong></td>
+                      <td>100K – 1M+</td>
+                      <td>100K – 1M+</td>
+                      <td><span class="tag is-success is-light">0.2–2 ms</span></td>
+                      <td><span class="tag is-success is-light">0.2–2 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>NGINX</strong></td>
+                      <td>100K – 1M+</td>
+                      <td>100K – 1M+</td>
+                      <td><span class="tag is-success is-light">0.5–5 ms</span></td>
+                      <td><span class="tag is-success is-light">0.5–5 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>AWS ELB</strong></td>
+                      <td>100K – millions+</td>
+                      <td>100K – millions+</td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Time Series Databases -->
+            <div class="box">
+              <h2 class="hub-card__title">Time Series Databases</h2>
+              <div class="table-container">
+                <table class="table is-striped is-hoverable is-fullwidth" data-table="benchmarks" data-section="timeseries">
+                  <thead>
+                    <tr>
+                      <th>Technology</th>
+                      <th>Writes/sec</th>
+                      <th>Reads/sec</th>
+                      <th>Read Latency</th>
+                      <th>Write Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>InfluxDB</strong></td>
+                      <td>50K – 500K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">5–50 ms</span></td>
+                      <td><span class="tag is-success is-light">2–10 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>TimescaleDB</strong></td>
+                      <td>10K – 100K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Prometheus</strong></td>
+                      <td>10K – 100K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">5–50 ms</span></td>
+                      <td><span class="tag is-warning is-light">5–50 ms</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
+
+            <!-- Vector Databases -->
+            <div class="box">
+              <h2 class="hub-card__title">Vector Databases</h2>
+              <div class="table-container">
+                <table class="table is-striped is-hoverable is-fullwidth" data-table="benchmarks" data-section="vector">
+                  <thead>
+                    <tr>
+                      <th>Technology</th>
+                      <th>Writes/sec</th>
+                      <th>Reads/sec</th>
+                      <th>Read Latency</th>
+                      <th>Write Latency</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <td><strong>Pinecone</strong></td>
+                      <td>10K – 100K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">10–100 ms</span></td>
+                      <td><span class="tag is-warning is-light">10–50 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Weaviate</strong></td>
+                      <td>5K – 50K</td>
+                      <td>5K – 50K</td>
+                      <td><span class="tag is-warning is-light">10–100 ms</span></td>
+                      <td><span class="tag is-warning is-light">10–50 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>Milvus</strong></td>
+                      <td>10K – 100K</td>
+                      <td>10K – 100K</td>
+                      <td><span class="tag is-warning is-light">5–50 ms</span></td>
+                      <td><span class="tag is-warning is-light">5–20 ms</span></td>
+                    </tr>
+                    <tr>
+                      <td><strong>FAISS</strong></td>
+                      <td>100K – 1M+</td>
+                      <td>100K – 1M+</td>
+                      <td><span class="tag is-success is-light">0.1–5 ms</span></td>
+                      <td><span class="tag is-success is-light">0.1–5 ms</span></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </div>
         </div>
       </div>
     </section>
 
-    <div class="card-grid card-grid--stack">
-      <!-- Core Systems -->
-      <section class="panel">
-        <h2>Core Systems</h2>
-        <table class="data-table data-table--bordered">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Writes/sec</th>
-              <th>Reads/sec</th>
-              <th>Read Latency</th>
-              <th>Write Latency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-strong">Redis</td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">0.1–0.5 ms</span></td>
-              <td><span class="text-success">0.1–0.7 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Elasticsearch</td>
-              <td><span class="text-danger">5K – 50K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">5–50 ms</span></td>
-              <td><span class="text-warn">10–100 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Kafka</td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-              <td><span class="text-success">2–10 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Cassandra</td>
-              <td><span class="text-success">50K – 500K</span></td>
-              <td><span class="text-warn">20K – 200K</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-              <td><span class="text-success">2–10 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">DynamoDB</td>
-              <td><span class="text-success">100K – millions+</span></td>
-              <td><span class="text-success">100K – millions+</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">PostgreSQL</td>
-              <td><span class="text-danger">5K – 50K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-              <td><span class="text-warn">2–20 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Flink</td>
-              <td><span class="text-success">100K – 10M+</span></td>
-              <td><span class="text-success">100K – 10M+</span></td>
-              <td><span class="text-danger">10–1000 ms</span></td>
-              <td><span class="text-danger">10–1000 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">ZooKeeper</td>
-              <td><span class="text-danger">1K – 10K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- API Gateways -->
-      <section class="panel">
-        <h2>API Gateways</h2>
-        <table class="data-table data-table--bordered">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Writes/sec</th>
-              <th>Reads/sec</th>
-              <th>Read Latency</th>
-              <th>Write Latency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-strong">Amazon API Gateway</td>
-              <td><span class="text-warn">10K – 100K+</span></td>
-              <td><span class="text-warn">10K – 100K+</span></td>
-              <td><span class="text-warn">10–50 ms</span></td>
-              <td><span class="text-warn">10–50 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Kong</td>
-              <td><span class="text-success">20K – 200K</span></td>
-              <td><span class="text-success">20K – 200K</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-              <td><span class="text-success">1–10 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">NGINX</td>
-              <td><span class="text-success">50K – 500K+</span></td>
-              <td><span class="text-success">50K – 500K+</span></td>
-              <td><span class="text-success">0.5–5 ms</span></td>
-              <td><span class="text-success">0.5–5 ms</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- Load Balancers -->
-      <section class="panel">
-        <h2>Load Balancers</h2>
-        <table class="data-table data-table--bordered">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Writes/sec</th>
-              <th>Reads/sec</th>
-              <th>Read Latency</th>
-              <th>Write Latency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-strong">HAProxy</td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">0.2–2 ms</span></td>
-              <td><span class="text-success">0.2–2 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">NGINX</td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">0.5–5 ms</span></td>
-              <td><span class="text-success">0.5–5 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">AWS ELB</td>
-              <td><span class="text-success">100K – millions+</span></td>
-              <td><span class="text-success">100K – millions+</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- Time Series Databases -->
-      <section class="panel">
-        <h2>Time Series Databases</h2>
-        <table class="data-table data-table--bordered">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Writes/sec</th>
-              <th>Reads/sec</th>
-              <th>Read Latency</th>
-              <th>Write Latency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-strong">InfluxDB</td>
-              <td><span class="text-success">50K – 500K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">5–50 ms</span></td>
-              <td><span class="text-success">2–10 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">TimescaleDB</td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-              <td><span class="text-warn">5–20 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Prometheus</td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">5–50 ms</span></td>
-              <td><span class="text-warn">5–50 ms</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-
-      <!-- Vector Databases -->
-      <section class="panel">
-        <h2>Vector Databases</h2>
-        <table class="data-table data-table--bordered">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Writes/sec</th>
-              <th>Reads/sec</th>
-              <th>Read Latency</th>
-              <th>Write Latency</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="text-strong">Pinecone</td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">10–100 ms</span></td>
-              <td><span class="text-warn">10–50 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Weaviate</td>
-              <td><span class="text-danger">5K – 50K</span></td>
-              <td><span class="text-danger">5K – 50K</span></td>
-              <td><span class="text-warn">10–100 ms</span></td>
-              <td><span class="text-warn">10–50 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">Milvus</td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">10K – 100K</span></td>
-              <td><span class="text-warn">5–50 ms</span></td>
-              <td><span class="text-success">5–20 ms</span></td>
-            </tr>
-            <tr>
-              <td class="text-strong">FAISS</td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">100K – 1M+</span></td>
-              <td><span class="text-success">0.1–5 ms</span></td>
-              <td><span class="text-success">0.1–5 ms</span></td>
-            </tr>
-          </tbody>
-        </table>
-      </section>
-    </div>
-    </div>
-
-    <footer class="site-footer">
-      <span class="site-footer-note">Technology benchmarks and latency comparisons</span>
-      <span class="site-footer-meta">Last updated May 2026</span>
+    <footer class="footer">
+      <div class="container">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <p>Technology benchmarks and latency comparisons</p>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <p>Last updated May 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   </main>
 
   <script>
     function parseNumericValue(str) {
-      // Extract the first number and its multiplier
       const match = str.match(/(\d+(?:\.\d+)?)\s*([KMB])?/i);
       if (!match) return 0;
       
       let value = parseFloat(match[1]);
       const unit = match[2]?.toUpperCase();
       
-      // Apply multiplier based on unit
       if (unit === 'K') {
         value *= 1000;
       } else if (unit === 'M') {
@@ -323,7 +357,6 @@
         value *= 1000000000;
       }
       
-      // Check for "millions" or "million" text for very large values
       if (str.toLowerCase().includes('million')) {
         value = Math.max(value, 1000000);
       }
@@ -332,31 +365,23 @@
     }
 
     function initSortableTables() {
-      const tables = document.querySelectorAll('.data-table--bordered');
+      const tables = document.querySelectorAll('.table');
       
       tables.forEach(table => {
         const headers = table.querySelectorAll('th');
         
-        // Sort by Technology column (index 0) on load
         sortTableByColumn(table, 0, 'asc');
-        headers[0].classList.add('sort-asc');
+        headers[0].classList.add('has-background-light');
         
         headers.forEach((header, index) => {
-          header.classList.add('is-sortable');
+          header.title = 'Click to sort';
           let sortDirection = 'asc';
           
           header.addEventListener('click', () => {
-            // Remove sort indicators from other headers
-            headers.forEach(h => {
-              h.classList.remove('sort-asc', 'sort-desc');
-            });
-            
-            // Add sort indicator to current header
-            header.classList.add(sortDirection === 'asc' ? 'sort-asc' : 'sort-desc');
+            headers.forEach(h => h.classList.remove('has-background-light'));
+            header.classList.add('has-background-light');
             
             sortTableByColumn(table, index, sortDirection);
-            
-            // Toggle sort direction for next click
             sortDirection = sortDirection === 'asc' ? 'desc' : 'asc';
           });
         });
@@ -364,37 +389,30 @@
     }
 
     function sortTableByColumn(table, columnIndex, direction) {
-      // Get all rows
       const tbody = table.querySelector('tbody');
       const rows = Array.from(tbody.querySelectorAll('tr'));
       
-      // Sort rows
       rows.sort((a, b) => {
         const aCell = a.cells[columnIndex].textContent.trim();
         const bCell = b.cells[columnIndex].textContent.trim();
         
-        // Try numeric parsing first (for throughput/latency columns)
         const aNum = parseNumericValue(aCell);
         const bNum = parseNumericValue(bCell);
         
         let comparison = 0;
         
         if (aNum > 0 && bNum > 0) {
-          // Numeric comparison
           comparison = aNum - bNum;
         } else {
-          // String comparison
           comparison = aCell.localeCompare(bCell);
         }
         
         return direction === 'asc' ? comparison : -comparison;
       });
       
-      // Re-append sorted rows to tbody
       rows.forEach(row => tbody.appendChild(row));
     }
     
-    // Initialize sortable tables when DOM is ready
     document.addEventListener('DOMContentLoaded', initSortableTables);
   </script>
 </body>

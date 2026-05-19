@@ -3,48 +3,107 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://rsms.me" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
   <title>System Design Interview Hub — Learning Docs</title>
-  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/bulma-overrides.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/utilities.css" />
 </head>
-<body class="page-home">
-  <main class="page-shell">
-    <header class="site-header">
-      <div class="brand">
-        <p class="eyebrow">Interview Preparation</p>
-        <h1 class="brand-title">System Design Interview Hub</h1>
-        <p class="brand-subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar topbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html" aria-current="page">
+          <span class="brand-mark"><span class="brand-dot" aria-hidden="true"></span><strong>Learning Hub</strong></span>
+        </a>
+      </div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <a class="navbar-item" href="leetcode-questions.html">LeetCode</a>
+          <a class="navbar-item" href="technology-comparison.html">Benchmarks</a>
+          <a class="navbar-item" href="tech-issues.html">Tech Issues</a>
+          <a class="navbar-item" href="fulfillment-load-comparison.html">Fulfillment</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <header class="page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <div class="page-header__meta">
+            <p class="heading">Interview Preparation</p>
+            <h1 class="title">System Design Interview Hub</h1>
+            <p class="subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+          </div>
+        </div>
       </div>
     </header>
 
-    <section class="card-grid">
-      <article class="card">
-        <h2 class="card-title">LeetCode Questions</h2>
-        <p class="card-copy">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
-        <a class="button button--lg" href="leetcode-questions.html">Open LeetCode Questions</a>
-      </article>
+    <section class="section" id="main">
+      <div class="container">
+        <div class="columns is-multiline">
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="hub-card__title">LeetCode Questions</h2>
+              <p class="hub-card__desc">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
+              <a class="button is-primary is-medium" href="leetcode-questions.html">Open LeetCode Questions</a>
+            </div>
+          </div>
 
-      <article class="card">
-        <h2 class="card-title">Technology Comparison</h2>
-        <p class="card-copy">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
-        <a class="button button--lg" href="technology-comparison.html">View Comparison</a>
-      </article>
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="hub-card__title">Technology Comparison</h2>
+              <p class="hub-card__desc">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
+              <a class="button is-primary is-medium" href="technology-comparison.html">View Comparison</a>
+            </div>
+          </div>
 
-      <article class="card">
-        <h2 class="card-title">Tech Issues &amp; Resolutions</h2>
-        <p class="card-copy">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
-        <a class="button button--lg" href="tech-issues.html">Browse Topics</a>
-      </article>
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="hub-card__title">Tech Issues &amp; Resolutions</h2>
+              <p class="hub-card__desc">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
+              <a class="button is-primary is-medium" href="tech-issues.html">Browse Topics</a>
+            </div>
+          </div>
 
-      <article class="card">
-        <h2 class="card-title">Fulfillment Load Comparison</h2>
-        <p class="card-copy">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
-        <a class="button button--lg" href="fulfillment-load-comparison.html">View Comparison</a>
-      </article>
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="hub-card__title">Fulfillment Load Comparison</h2>
+              <p class="hub-card__desc">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
+              <a class="button is-primary is-medium" href="fulfillment-load-comparison.html">View Comparison</a>
+            </div>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <footer class="site-footer">
-      <span class="site-footer-note">Curated system design and interview preparation resources</span>
-      <span class="site-footer-meta">Last updated May 2026</span>
+    <footer class="footer">
+      <div class="container">
+        <div class="columns">
+          <div class="column">
+            <p><strong>Learning Hub</strong></p>
+            <p class="u-text-xs u-text-muted">Curated system design and interview preparation resources.</p>
+          </div>
+          <div class="column">
+            <p class="u-text-xs u-text-muted u-mb-2">Sections</p>
+            <div class="buttons">
+              <a class="button is-light is-small" href="tech-issues.html">Tech Issues</a>
+              <a class="button is-light is-small" href="technology-comparison.html">Benchmarks</a>
+              <a class="button is-light is-small" href="leetcode-questions.html">LeetCode</a>
+              <a class="button is-light is-small" href="fulfillment-load-comparison.html">Fulfillment</a>
+            </div>
+          </div>
+          <div class="column u-text-right-desktop">
+            <p class="u-text-xs u-text-muted">Last updated May 2026</p>
+          </div>
+        </div>
+      </div>
     </footer>
   </main>
 </body>

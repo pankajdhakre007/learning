@@ -3,85 +3,135 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://rsms.me" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
   <title>LeetCode — Algorithm Problems by Category — Learning Docs</title>
-  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/bulma-overrides.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/utilities.css" />
 </head>
-<body class="page-leetcode">
-  <main class="page-shell">
-    <header class="site-header">
-      <div class="brand">
-        <p class="eyebrow">Algorithm Practice</p>
-        <h1 class="brand-title">Algorithm Problems by Category</h1>
-        <p class="brand-subtitle">Senior-track problems across arrays, trees, graphs, and dynamic programming.</p>
+<body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar topbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <span class="brand-mark"><span class="brand-dot" aria-hidden="true"></span><strong>Learning Hub</strong></span>
+        </a>
       </div>
-      <a class="button button--icon" href="index.html" aria-label="Back to home" title="Back to home">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </a>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <a class="navbar-item" href="leetcode-questions.html" aria-current="page">LeetCode</a>
+          <a class="navbar-item" href="technology-comparison.html">Benchmarks</a>
+          <a class="navbar-item" href="tech-issues.html">Tech Issues</a>
+          <a class="navbar-item" href="fulfillment-load-comparison.html">Fulfillment</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <header class="page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <div class="page-header__meta">
+            <p class="heading">Algorithm Practice</p>
+            <h1 class="title">Algorithm Problems by Category</h1>
+            <p class="subtitle">Senior-track problems across arrays, trees, graphs, and dynamic programming.</p>
+          </div>
+          <div class="page-header__actions">
+            <a class="button is-light" href="index.html">Back</a>
+          </div>
+        </div>
+      </div>
     </header>
 
-    <div class="split-layout">
-      <aside class="sidebar">
-        <p class="label-mono">Categories</p>
-        <a class="sidebar-link" href="#arrays">Arrays</a>
-        <a class="sidebar-link" href="#sliding-window">Sliding Window</a>
-        <a class="sidebar-link" href="#two-pointers">Two Pointers</a>
-        <a class="sidebar-link" href="#binary-search">Binary Search</a>
-        <a class="sidebar-link" href="#stack">Stack</a>
-        <a class="sidebar-link" href="#queue-monotonic-queue">Queue</a>
-        <a class="sidebar-link" href="#linked-list">Linked List</a>
-        <a class="sidebar-link" href="#hashing">Hashing</a>
-        <a class="sidebar-link" href="#recursion-backtracking">Backtracking</a>
-        <a class="sidebar-link" href="#trees">Trees</a>
-        <a class="sidebar-link" href="#binary-search-trees">BST</a>
-        <a class="sidebar-link" href="#heaps-priority-queue">Heaps</a>
-        <a class="sidebar-link" href="#graphs">Graphs</a>
-        <a class="sidebar-link" href="#dynamic-programming">Dynamic Programming</a>
-        <a class="sidebar-link" href="#greedy">Greedy</a>
-      </aside>
+    <section class="section" id="main">
+      <div class="container">
+        <div class="columns">
+          <aside class="column is-one-quarter">
+            <div class="box">
+              <p class="heading">Categories</p>
+              <div class="menu" id="categoryNav" aria-label="Problem categories"></div>
+            </div>
+          </aside>
 
-      <section class="page-content">
+          <div class="column">
+            <div class="columns is-multiline">
+              <div class="column is-one-quarter">
+                <div class="box">
+                  <div class="heading">Total Categories</div>
+                  <p class="title" id="categoryCount">15</p>
+                </div>
+              </div>
+              <div class="column is-one-quarter">
+                <div class="box">
+                  <div class="heading">Total Questions</div>
+                  <p class="title" id="questionCount">0</p>
+                </div>
+              </div>
+              <div class="column is-one-quarter">
+                <div class="box">
+                  <div class="heading">Medium Questions</div>
+                  <p class="title" id="mediumCount">0</p>
+                </div>
+              </div>
+              <div class="column is-one-quarter">
+                <div class="box">
+                  <div class="heading">Hard Questions</div>
+                  <p class="title" id="hardCount">0</p>
+                </div>
+              </div>
+            </div>
 
-        <div class="card-grid card-grid--stats">
-          <article class="card card--stat">
-            <h4 class="card-title">Total Categories</h4>
-            <p class="card-value" id="categoryCount">15</p>
-          </article>
-          <article class="card card--stat">
-            <h4 class="card-title">Total Questions</h4>
-            <p class="card-value" id="questionCount">0</p>
-          </article>
-          <article class="card card--stat">
-            <h4 class="card-title">Medium Questions</h4>
-            <p class="card-value" id="mediumCount">0</p>
-          </article>
-          <article class="card card--stat">
-            <h4 class="card-title">Hard Questions</h4>
-            <p class="card-value" id="hardCount">0</p>
-          </article>
-        </div>
+            <div class="box">
+              <div class="field is-grouped is-grouped-multiline">
+                <div class="control">
+                  <div class="field">
+                    <label class="is-sr-only" for="searchInput">Search problems</label>
+                    <p class="control">
+                      <input id="searchInput" class="input" type="search" placeholder="Search problem, pattern, category…" />
+                    </p>
+                  </div>
+                </div>
+                <div class="control">
+                  <div class="buttons has-addons">
+                    <button class="button is-selected" data-difficulty="All" aria-pressed="true" type="button">All</button>
+                    <button class="button" data-difficulty="Easy" aria-pressed="false" type="button">Easy</button>
+                    <button class="button" data-difficulty="Medium" aria-pressed="false" type="button">Medium</button>
+                    <button class="button" data-difficulty="Hard" aria-pressed="false" type="button">Hard</button>
+                  </div>
+                </div>
+              </div>
+            </div>
 
-        <div class="toolbar">
-          <div class="chip-grid" role="group" aria-label="Filter questions by difficulty">
-            <button class="chip chip--filter is-active" data-difficulty="All" type="button">All</button>
-            <button class="chip chip--filter" data-difficulty="Easy" type="button">Easy</button>
-            <button class="chip chip--filter" data-difficulty="Medium" type="button">Medium</button>
-            <button class="chip chip--filter" data-difficulty="Hard" type="button">Hard</button>
+            <div id="content"></div>
           </div>
-          <input class="search-box" id="searchInput" type="search" placeholder="Search problem, pattern, category…" aria-label="Search problems" />
         </div>
+      </div>
+    </section>
 
-        <div class="page-content-body" id="content"></div>
-      </section>
-    </div>
-
-    <footer class="site-footer">
-      <span class="site-footer-note">Algorithm practice for senior engineering interviews</span>
-      <span class="site-footer-meta">Last updated May 2026</span>
+    <footer class="footer">
+      <div class="container">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <p>Algorithm practice for senior engineering interviews</p>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <p>Last updated May 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   </main>
 
+  <script src="assets/data/leetcode-roadmap.js"></script>
   <script src="assets/js/leetcode.js"></script>
 </body>
 </html>
