@@ -3,52 +3,80 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://rsms.me" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
   <title>Production Issues & Resolutions — Learning Docs</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
-  <link rel="stylesheet" href="assets/css/theme.css" />
-  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/bulma-overrides.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/utilities.css" />
 </head>
 <body>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar topbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html">
+          <span class="brand-mark"><span class="brand-dot" aria-hidden="true"></span><strong>Learning Hub</strong></span>
+        </a>
+      </div>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <a class="navbar-item" href="leetcode-questions.html">LeetCode</a>
+          <a class="navbar-item" href="technology-comparison.html">Benchmarks</a>
+          <a class="navbar-item" href="tech-issues.html" aria-current="page">Tech Issues</a>
+          <a class="navbar-item" href="fulfillment-load-comparison.html">Fulfillment</a>
+        </div>
+      </div>
+    </div>
+  </nav>
   <main>
-    <section class="section">
+    <header class="page-header">
       <div class="container">
-        <div class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <div>
-                <p class="heading">Technology Deep-Dives</p>
-                <h1 class="title">Production Issues &amp; Resolutions</h1>
-                <p class="subtitle">Twenty-eight failure domains across Kafka, MongoDB, Redis, Cassandra, Kubernetes, Elasticsearch, and API Gateway.</p>
-              </div>
-            </div>
+        <div class="page-header__inner">
+          <div class="page-header__meta">
+            <p class="heading">Technology Deep-Dives</p>
+            <h1 class="title">Production Issues &amp; Resolutions</h1>
+            <p class="subtitle">Twenty-eight failure domains across Kafka, MongoDB, Redis, Cassandra, Kubernetes, Elasticsearch, and API Gateway.</p>
           </div>
-          <div class="level-right">
-            <div class="level-item">
-              <a class="button is-light" href="index.html">Back</a>
-            </div>
+          <div class="page-header__actions">
+            <a class="button is-light" href="index.html">Back</a>
           </div>
         </div>
       </div>
-    </section>
+    </header>
 
-    <section class="section">
+    <section class="section" id="main">
       <div class="container">
-        <div class="columns">
-          <aside class="column is-one-quarter">
-            <div class="box">
-              <p class="heading">All Topics</p>
-              <div id="navList"></div>
-            </div>
+        <div class="page-grid">
+          <aside class="sidebar">
+            <details class="panel panel--tight" open>
+              <summary class="panel__body">
+                <strong>All Topics</strong>
+                <span class="u-text-muted u-text-xs">Tap to collapse</span>
+              </summary>
+              <div class="panel__body">
+                <div class="field">
+                  <label class="is-sr-only" for="topicSearch">Search topics</label>
+                  <div class="control">
+                    <input id="topicSearch" class="input" type="search" placeholder="Search topics…" />
+                  </div>
+                </div>
+                <div id="navList"></div>
+              </div>
+            </details>
           </aside>
 
-          <main class="column">
-            <div class="box">
-              <div id="loadingState" class="has-text-centered mb-4">
-                <button class="button is-white is-loading" type="button">Loading</button>
+          <div class="page-grid__content">
+            <div class="panel iframe-shell">
+              <div class="panel__body" id="loadingState" aria-live="polite">
+                <span class="u-text-muted u-text-xs">Select a topic from the left.</span>
               </div>
               <iframe id="contentFrame" title="Technology issue details"></iframe>
             </div>
-          </main>
+          </div>
         </div>
       </div>
     </section>
@@ -75,6 +103,7 @@
     const contentFrame = document.getElementById('contentFrame');
     const loadingState = document.getElementById('loadingState');
     const navList = document.getElementById('navList');
+    const topicSearch = document.getElementById('topicSearch');
 
     const topics = [
       {
@@ -149,87 +178,119 @@
       }
     ];
 
-    // Render navigation
-    topics.forEach(topic => {
-      const section = document.createElement('div');
-      section.className = 'block';
-      
-      const header = document.createElement('div');
-      header.className = 'mb-2';
-      
-      const title = document.createElement('div');
-      title.className = 'level is-mobile';
-      
-      const titleLeft = document.createElement('div');
-      titleLeft.className = 'level-left';
-      titleLeft.innerHTML = `<div class="level-item"><strong>${topic.category}</strong></div>`;
-      
-      const titleRight = document.createElement('div');
-      titleRight.className = 'level-right';
-      titleRight.innerHTML = `<div class="level-item"><span class="tag is-light">${topic.type}</span></div>`;
-      
-      title.appendChild(titleLeft);
-      title.appendChild(titleRight);
-      header.appendChild(title);
-      
-      const menu = document.createElement('div');
-      menu.className = 'menu';
-      const list = document.createElement('ul');
-      list.className = 'menu-list';
-      
-      topic.issues.forEach(issue => {
-        const li = document.createElement('li');
-        const a = document.createElement('a');
-        a.href = '#';
-        a.dataset.page = issue.page;
-        a.dataset.category = topic.type;
-        a.textContent = issue.title;
-        a.addEventListener('click', (e) => {
-          e.preventDefault();
-          loadPage(issue.page);
+    function renderNav(filterText = '') {
+      navList.innerHTML = '';
+      const needle = filterText.trim().toLowerCase();
+      const current = window.location.hash ? `${window.location.hash.substring(1)}.html` : null;
+
+      topics.forEach(topic => {
+        const matchingIssues = topic.issues.filter(issue => {
+          if (!needle) return true;
+          return [topic.category, topic.type, issue.title].some(value => value.toLowerCase().includes(needle));
         });
-        li.appendChild(a);
-        list.appendChild(li);
+        if (!matchingIssues.length) return;
+
+        const section = document.createElement('div');
+        section.className = 'block';
+
+        const header = document.createElement('div');
+        header.className = 'mb-2';
+
+        const title = document.createElement('div');
+        title.className = 'level is-mobile';
+
+        const titleLeft = document.createElement('div');
+        titleLeft.className = 'level-left';
+        titleLeft.innerHTML = `<div class="level-item"><strong>${topic.category}</strong></div>`;
+
+        const titleRight = document.createElement('div');
+        titleRight.className = 'level-right';
+        titleRight.innerHTML = `<div class="level-item"><span class="tag is-light">${topic.type}</span></div>`;
+
+        title.appendChild(titleLeft);
+        title.appendChild(titleRight);
+        header.appendChild(title);
+
+        const menu = document.createElement('div');
+        menu.className = 'menu';
+        const list = document.createElement('ul');
+        list.className = 'menu-list';
+
+        matchingIssues.forEach(issue => {
+          const li = document.createElement('li');
+          const a = document.createElement('a');
+          a.href = `tech-issues/${issue.page}`;
+          a.textContent = issue.title;
+          a.dataset.page = issue.page;
+          if (current === issue.page) {
+            a.classList.add('is-active');
+            a.setAttribute('aria-current', 'page');
+          }
+          li.appendChild(a);
+          list.appendChild(li);
+        });
+
+        menu.appendChild(list);
+        section.appendChild(header);
+        section.appendChild(menu);
+        navList.appendChild(section);
       });
-      
-      menu.appendChild(list);
-      section.appendChild(header);
-      section.appendChild(menu);
-      navList.appendChild(section);
-    });
-
-    const navLinks = document.querySelectorAll('[data-page]');
-
-    function loadPage(pageUrl) {
-      loadingState.classList.remove('is-hidden');
-      contentFrame.src = `tech-issues/${pageUrl}`;
-
-      navLinks.forEach(link => {
-        link.classList.toggle('is-active', link.dataset.page === pageUrl);
-      });
-
-      window.location.hash = pageUrl.replace('.html', '');
     }
 
-    contentFrame.addEventListener('load', () => {
-      loadingState.classList.add('is-hidden');
+    topicSearch.addEventListener('input', () => {
+      renderNav(topicSearch.value);
     });
+
+    function setActive(pageUrl) {
+      navList.querySelectorAll('a[data-page]').forEach(link => {
+        const isActive = link.dataset.page === pageUrl;
+        link.classList.toggle('is-active', isActive);
+        if (isActive) link.setAttribute('aria-current', 'page');
+        else link.removeAttribute('aria-current');
+      });
+    }
+
+    function loadPage(pageUrl, { pushHash = true } = {}) {
+      loadingState.textContent = 'Loading...';
+      contentFrame.src = `tech-issues/${pageUrl}`;
+      setActive(pageUrl);
+      if (pushHash) window.location.hash = pageUrl.replace('.html', '');
+    }
+
+    // Intercept clicks for SPA behavior, but keep real href for no-JS fallback.
+    navList.addEventListener('click', (e) => {
+      const link = e.target && e.target.closest && e.target.closest('a[data-page]');
+      if (!link) return;
+      e.preventDefault();
+      loadPage(link.dataset.page);
+    });
+
+    // Stop loading indicator when iframe loads; handle missing pages with a timeout.
+    let loadTimeout = null;
+    contentFrame.addEventListener('load', () => {
+      if (loadTimeout) window.clearTimeout(loadTimeout);
+      loadingState.textContent = '';
+    });
+
+    function safeLoad(pageUrl) {
+      loadPage(pageUrl, { pushHash: false });
+      if (loadTimeout) window.clearTimeout(loadTimeout);
+      loadTimeout = window.setTimeout(() => {
+        loadingState.textContent = 'Failed to load content.';
+      }, 6000);
+    }
 
     window.addEventListener('hashchange', () => {
       const hash = window.location.hash.substring(1);
-      if (hash) {
-        const pageUrl = `${hash}.html`;
-        const matchingLink = Array.from(navLinks).find(link => link.dataset.page === pageUrl);
-        if (matchingLink) {
-          loadPage(pageUrl);
-        }
-      }
+      if (!hash) return;
+      safeLoad(`${hash}.html`);
+      setActive(`${hash}.html`);
     });
 
+    renderNav();
     const initialHash = window.location.hash.substring(1);
     const initialPage = initialHash ? `${initialHash}.html` : 'api-gateway-traffic.html';
-    const validPage = Array.from(navLinks).some(link => link.dataset.page === initialPage);
-    loadPage(validPage ? initialPage : 'api-gateway-traffic.html');
+    safeLoad(initialPage);
   </script>
 </body>
 </html>

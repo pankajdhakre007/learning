@@ -1,114 +1,195 @@
 function renderTechIssuePage(pageData) {
   const root = document.getElementById('root');
-  if (!root) {
-    return;
+  if (!root) return;
+
+  // Clear existing content safely.
+  root.innerHTML = '';
+
+  const el = (tag, { className, text, attrs } = {}) => {
+    const node = document.createElement(tag);
+    if (className) node.className = className;
+    if (text != null) node.textContent = text;
+    if (attrs) Object.entries(attrs).forEach(([k, v]) => node.setAttribute(k, v));
+    return node;
+  };
+
+  const doc = el('div', { className: 'doc' });
+
+  const section = (tight = false) => el('section', { className: `doc-section${tight ? ' doc-section--tight' : ''}` });
+
+  // Header
+  {
+    const s = section(false);
+    s.appendChild(el('p', { className: 'heading', text: pageData.header.eyebrow }));
+    s.appendChild(el('h1', { className: 'title', text: pageData.header.title }));
+    s.appendChild(el('p', { className: 'subtitle', text: pageData.header.description }));
+    doc.appendChild(s);
   }
 
-  const renderList = items => items.map(item => `<li>${item}</li>`).join('');
+  // Synonyms
+  {
+    const s = section(true);
+    s.appendChild(el('p', { className: 'heading', text: 'Common synonyms' }));
+    const tags = el('div', { className: 'tags' });
+    pageData.synonyms.forEach((syn) => tags.appendChild(el('span', { className: 'tag is-light', text: syn })));
+    s.appendChild(tags);
+    doc.appendChild(s);
+  }
 
-  root.innerHTML = `
-    <section class="section">
-      <p class="heading">${pageData.header.eyebrow}</p>
-      <h1 class="title">${pageData.header.title}</h1>
-      <p class="subtitle">${pageData.header.description}</p>
-    </section>
+  // Questions
+  {
+    const s = section(true);
+    s.appendChild(el('p', { className: 'heading', text: 'How interviewers phrase this' }));
+    const content = el('div', { className: 'content' });
+    pageData.questions.forEach((q) => content.appendChild(el('blockquote', { text: q })));
+    s.appendChild(content);
+    doc.appendChild(s);
+  }
 
-    <section class="section pt-0">
-      <p class="heading">Common synonyms</p>
-      <div class="tags">
-        ${pageData.synonyms.map(s => `<span class="tag is-light">${s}</span>`).join('')}
-      </div>
-    </section>
+  // Layers
+  const layerSection = section(true);
+  layerSection.appendChild(el('p', { className: 'heading', text: 'Layer-by-layer breakdown' }));
 
-    <section class="section pt-0">
-      <p class="heading">How interviewers phrase this</p>
-      <div class="content">
-        ${pageData.questions.map(q => `<blockquote>${q}</blockquote>`).join('')}
-      </div>
-    </section>
+  const buttonRow = el('div', { className: 'buttons has-addons is-flex-wrap-wrap', attrs: { role: 'tablist' } });
+  layerSection.appendChild(buttonRow);
 
-    <section class="section pt-0">
-      <p class="heading">Layer-by-layer breakdown</p>
-      <div class="buttons has-addons is-flex-wrap-wrap">
-        ${pageData.layers.map((layer, index) => `<button class="button is-small ${index === 0 ? 'is-selected' : ''}" data-layer-button type="button" onclick="showLayer(${index})">${layer.name}</button>`).join('')}
-      </div>
+  const layerPanels = [];
 
-      ${pageData.layers.map((layer, index) => `
-        <div class="box ${index === 0 ? '' : 'is-hidden'}" id="layer-${index}">
-          <h2 class="title is-4">${layer.title}</h2>
-          <p class="subtitle is-6">${layer.description}</p>
+  function buildInfoMessage(title, items) {
+    const article = el('article', { className: 'message is-info' });
+    const header = el('div', { className: 'message-header' });
+    header.appendChild(el('p', { text: title }));
+    const body = el('div', { className: 'message-body' });
+    const content = el('div', { className: 'content' });
+    const ul = el('ul');
+    items.forEach((it) => ul.appendChild(el('li', { text: it })));
+    content.appendChild(ul);
+    body.appendChild(content);
+    article.appendChild(header);
+    article.appendChild(body);
+    return article;
+  }
 
-          <div class="columns is-multiline">
-            <div class="column is-half">
-              <article class="message is-info">
-                <div class="message-header"><p>Observable symptoms</p></div>
-                <div class="message-body"><div class="content"><ul>${renderList(layer.symptoms)}</ul></div></div>
-              </article>
-            </div>
-            <div class="column is-half">
-              <article class="message is-info">
-                <div class="message-header"><p>Root causes</p></div>
-                <div class="message-body"><div class="content"><ul>${renderList(layer.causes)}</ul></div></div>
-              </article>
-            </div>
-            <div class="column is-half">
-              <article class="message is-info">
-                <div class="message-header"><p>System effects</p></div>
-                <div class="message-body"><div class="content"><ul>${renderList(layer.effects)}</ul></div></div>
-              </article>
-            </div>
-            <div class="column is-half">
-              <article class="message is-info">
-                <div class="message-header"><p>Mitigations</p></div>
-                <div class="message-body"><div class="content"><ul>${renderList(layer.mitigations)}</ul></div></div>
-              </article>
-            </div>
-          </div>
+  pageData.layers.forEach((layer, index) => {
+    const btn = el('button', {
+      className: `button is-small${index === 0 ? ' is-selected' : ''}`,
+      text: layer.name,
+      attrs: {
+        type: 'button',
+        'data-layer-button': 'true',
+        'data-layer-index': String(index),
+        role: 'tab',
+        'aria-selected': index === 0 ? 'true' : 'false',
+      },
+    });
+    buttonRow.appendChild(btn);
 
-          <p class="heading">Key metrics</p>
-          <div class="tags">
-            ${layer.metrics.map(metric => `<span class="tag is-primary is-light">${metric}</span>`).join('')}
-          </div>
+    const panel = el('div', {
+      className: `panel panel--tight${index === 0 ? '' : ' is-hidden'}`,
+      attrs: { 'data-layer': 'true', 'data-layer-index': String(index) },
+    });
+    const panelBody = el('div', { className: 'panel__body' });
+    panelBody.appendChild(el('h2', { className: 'title is-4', text: layer.title }));
+    panelBody.appendChild(el('p', { className: 'subtitle is-6', text: layer.description }));
 
-          <article class="message is-warning">
-            <div class="message-header"><p>Tradeoffs</p></div>
-            <div class="message-body"><div class="content"><ul>${renderList(layer.tradeoffs)}</ul></div></div>
-          </article>
-        </div>
-      `).join('')}
-    </section>
+    const cols = el('div', { className: 'columns is-multiline' });
+    const colHalf = (child) => {
+      const col = el('div', { className: 'column is-half' });
+      col.appendChild(child);
+      return col;
+    };
 
-    <section class="section pt-0">
-      <p class="heading">Universal distributed systems pattern</p>
-      <div class="table-container">
-        <table class="table is-striped is-hoverable is-fullwidth">
-          <thead>
-            <tr>
-              <th>Technology</th>
-              <th>Equivalent problem</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${pageData.comparisons.map(comparison => `<tr><td><strong>${comparison.tech}</strong></td><td>${comparison.problem}</td></tr>`).join('')}
-          </tbody>
-        </table>
-      </div>
-    </section>
+    cols.appendChild(colHalf(buildInfoMessage('Observable symptoms', layer.symptoms)));
+    cols.appendChild(colHalf(buildInfoMessage('Root causes', layer.causes)));
+    cols.appendChild(colHalf(buildInfoMessage('System effects', layer.effects)));
+    cols.appendChild(colHalf(buildInfoMessage('Mitigations', layer.mitigations)));
 
-    <section class="section pt-0">
-      <article class="message is-info">
-        <div class="message-body">${pageData.insight}</div>
-      </article>
-    </section>
-  `;
-}
+    panelBody.appendChild(cols);
 
-function showLayer(index) {
-  document.querySelectorAll('[id^="layer-"]').forEach((section, sectionIndex) => {
-    section.classList.toggle('is-hidden', sectionIndex !== index);
+    panelBody.appendChild(el('p', { className: 'heading', text: 'Key metrics' }));
+    const metricTags = el('div', { className: 'tags' });
+    layer.metrics.forEach((m) => metricTags.appendChild(el('span', { className: 'tag is-primary is-light', text: m })));
+    panelBody.appendChild(metricTags);
+
+    const tradeoffs = el('article', { className: 'message is-warning' });
+    const tradeHeader = el('div', { className: 'message-header' });
+    tradeHeader.appendChild(el('p', { text: 'Tradeoffs' }));
+    const tradeBody = el('div', { className: 'message-body' });
+    const tradeContent = el('div', { className: 'content' });
+    const tradeUl = el('ul');
+    layer.tradeoffs.forEach((t) => tradeUl.appendChild(el('li', { text: t })));
+    tradeContent.appendChild(tradeUl);
+    tradeBody.appendChild(tradeContent);
+    tradeoffs.appendChild(tradeHeader);
+    tradeoffs.appendChild(tradeBody);
+    panelBody.appendChild(tradeoffs);
+
+    panel.appendChild(panelBody);
+    layerSection.appendChild(panel);
+    layerPanels.push(panel);
   });
 
-  document.querySelectorAll('[data-layer-button]').forEach((button, buttonIndex) => {
-    button.classList.toggle('is-selected', buttonIndex === index);
+  // Event delegation for layer switching (no inline onclick).
+  buttonRow.addEventListener('click', (e) => {
+    const btn = e.target && e.target.closest && e.target.closest('[data-layer-index]');
+    if (!btn) return;
+    const index = Number(btn.getAttribute('data-layer-index'));
+    if (Number.isNaN(index)) return;
+
+    layerPanels.forEach((p) => {
+      p.classList.toggle('is-hidden', Number(p.getAttribute('data-layer-index')) !== index);
+    });
+
+    buttonRow.querySelectorAll('[data-layer-button]').forEach((b) => {
+      const isActive = Number(b.getAttribute('data-layer-index')) === index;
+      b.classList.toggle('is-selected', isActive);
+      b.setAttribute('aria-selected', isActive ? 'true' : 'false');
+    });
   });
+
+  doc.appendChild(layerSection);
+
+  // Comparisons table
+  {
+    const s = section(true);
+    s.appendChild(el('p', { className: 'heading', text: 'Universal distributed systems pattern' }));
+
+    const tableContainer = el('div', { className: 'table-container' });
+    const table = el('table', { className: 'table is-striped is-hoverable is-fullwidth' });
+    const thead = el('thead');
+    const trh = el('tr');
+    trh.appendChild(el('th', { text: 'Technology' }));
+    trh.appendChild(el('th', { text: 'Equivalent problem' }));
+    thead.appendChild(trh);
+
+    const tbody = el('tbody');
+    pageData.comparisons.forEach((c) => {
+      const tr = el('tr');
+      const tdTech = el('td');
+      tdTech.appendChild(el('strong', { text: c.tech }));
+      const tdProb = el('td', { text: c.problem });
+      tr.appendChild(tdTech);
+      tr.appendChild(tdProb);
+      tbody.appendChild(tr);
+    });
+
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tableContainer.appendChild(table);
+    s.appendChild(tableContainer);
+    doc.appendChild(s);
+  }
+
+  // Insight
+  {
+    const s = section(true);
+    const article = el('article', { className: 'message is-info' });
+    const body = el('div', { className: 'message-body', text: pageData.insight });
+    article.appendChild(body);
+    s.appendChild(article);
+    doc.appendChild(s);
+  }
+
+  root.appendChild(doc);
 }
+

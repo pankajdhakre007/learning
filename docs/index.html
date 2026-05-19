@@ -3,52 +3,79 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="preconnect" href="https://rsms.me" />
+  <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+
   <title>System Design Interview Hub — Learning Docs</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
-  <link rel="stylesheet" href="assets/css/theme.css" />
-  <link rel="stylesheet" href="assets/css/site.css" />
+  <link rel="stylesheet" href="assets/css/tokens.css" />
+  <link rel="stylesheet" href="assets/css/bulma-overrides.css" />
+  <link rel="stylesheet" href="assets/css/components.css" />
+  <link rel="stylesheet" href="assets/css/utilities.css" />
 </head>
 <body>
-  <main>
-    <section class="section">
-      <div class="container">
-        <p class="heading">Interview Preparation</p>
-        <h1 class="title">System Design Interview Hub</h1>
-        <p class="subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+  <a class="skip-link" href="#main">Skip to content</a>
+  <nav class="navbar topbar" role="navigation" aria-label="Primary">
+    <div class="container">
+      <div class="navbar-brand">
+        <a class="navbar-item" href="index.html" aria-current="page">
+          <span class="brand-mark"><span class="brand-dot" aria-hidden="true"></span><strong>Learning Hub</strong></span>
+        </a>
       </div>
-    </section>
+      <div class="navbar-menu is-active">
+        <div class="navbar-end">
+          <a class="navbar-item" href="leetcode-questions.html">LeetCode</a>
+          <a class="navbar-item" href="technology-comparison.html">Benchmarks</a>
+          <a class="navbar-item" href="tech-issues.html">Tech Issues</a>
+          <a class="navbar-item" href="fulfillment-load-comparison.html">Fulfillment</a>
+        </div>
+      </div>
+    </div>
+  </nav>
+  <main>
+    <header class="page-header">
+      <div class="container">
+        <div class="page-header__inner">
+          <div class="page-header__meta">
+            <p class="heading">Interview Preparation</p>
+            <h1 class="title">System Design Interview Hub</h1>
+            <p class="subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+          </div>
+        </div>
+      </div>
+    </header>
 
-    <section class="section">
+    <section class="section" id="main">
       <div class="container">
         <div class="columns is-multiline">
           <div class="column is-half-desktop is-full-tablet">
             <div class="box">
-              <h2 class="title is-4">LeetCode Questions</h2>
-              <p class="mb-4">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
+              <h2 class="hub-card__title">LeetCode Questions</h2>
+              <p class="hub-card__desc">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
               <a class="button is-primary is-medium" href="leetcode-questions.html">Open LeetCode Questions</a>
             </div>
           </div>
 
           <div class="column is-half-desktop is-full-tablet">
             <div class="box">
-              <h2 class="title is-4">Technology Comparison</h2>
-              <p class="mb-4">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
+              <h2 class="hub-card__title">Technology Comparison</h2>
+              <p class="hub-card__desc">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
               <a class="button is-primary is-medium" href="technology-comparison.html">View Comparison</a>
             </div>
           </div>
 
           <div class="column is-half-desktop is-full-tablet">
             <div class="box">
-              <h2 class="title is-4">Tech Issues &amp; Resolutions</h2>
-              <p class="mb-4">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
+              <h2 class="hub-card__title">Tech Issues &amp; Resolutions</h2>
+              <p class="hub-card__desc">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
               <a class="button is-primary is-medium" href="tech-issues.html">Browse Topics</a>
             </div>
           </div>
 
           <div class="column is-half-desktop is-full-tablet">
             <div class="box">
-              <h2 class="title is-4">Fulfillment Load Comparison</h2>
-              <p class="mb-4">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
+              <h2 class="hub-card__title">Fulfillment Load Comparison</h2>
+              <p class="hub-card__desc">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
               <a class="button is-primary is-medium" href="fulfillment-load-comparison.html">View Comparison</a>
             </div>
           </div>
@@ -58,16 +85,22 @@
 
     <footer class="footer">
       <div class="container">
-        <div class="level">
-          <div class="level-left">
-            <div class="level-item">
-              <p>Curated system design and interview preparation resources</p>
+        <div class="columns">
+          <div class="column">
+            <p><strong>Learning Hub</strong></p>
+            <p class="u-text-xs u-text-muted">Curated system design and interview preparation resources.</p>
+          </div>
+          <div class="column">
+            <p class="u-text-xs u-text-muted u-mb-2">Sections</p>
+            <div class="buttons">
+              <a class="button is-light is-small" href="tech-issues.html">Tech Issues</a>
+              <a class="button is-light is-small" href="technology-comparison.html">Benchmarks</a>
+              <a class="button is-light is-small" href="leetcode-questions.html">LeetCode</a>
+              <a class="button is-light is-small" href="fulfillment-load-comparison.html">Fulfillment</a>
             </div>
           </div>
-          <div class="level-right">
-            <div class="level-item">
-              <p>Last updated May 2026</p>
-            </div>
+          <div class="column u-text-right-desktop">
+            <p class="u-text-xs u-text-muted">Last updated May 2026</p>
           </div>
         </div>
       </div>
