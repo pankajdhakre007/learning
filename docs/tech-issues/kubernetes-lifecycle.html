@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Kubernetes — Application Lifecycle Instability</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
 </head>
-<body class="doc-page">
-  <div class="page-inner" id="root"></div>
+<body>
+  <main class="section">
+    <div class="container" id="root"></div>
+  </main>
   <script src="../assets/js/tech-issue-renderer.js"></script>
   <script>
     const pageData = {
-    "hero": {
+    "header": {
         "eyebrow": "Kubernetes — pod lifecycle",
         "title": "Application lifecycle instability",
         "description": "Guide covering CrashLoopBackOff, restart storms, probe flapping, and rollout instability."

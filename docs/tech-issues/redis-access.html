@@ -4,14 +4,17 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Redis — Data Access Imbalance</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
 </head>
-<body class="doc-page">
-  <div class="page-inner" id="root"></div>
+<body>
+  <main class="section">
+    <div class="container" id="root"></div>
+  </main>
   <script src="../assets/js/tech-issue-renderer.js"></script>
   <script>
     const pageData = {
-    "hero": {
+    "header": {
         "eyebrow": "Redis — access distribution",
         "title": "Data access imbalance",
         "description": "Guide covering hot keys, key skew, shard hotspotting, and tail-latency amplification in Redis deployments."

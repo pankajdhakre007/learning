@@ -100,7 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
     };
 
     const content = document.getElementById('content');
-    const chips = document.querySelectorAll('.chip--filter');
+    const filters = document.querySelectorAll('[data-difficulty]');
     const searchInput = document.getElementById('searchInput');
     const totals = {
         count: document.getElementById('questionCount'),
@@ -145,37 +145,49 @@ document.addEventListener('DOMContentLoaded', () => {
             section.id = slugify(category);
 
             section.innerHTML = `
-        <div class="category-header">
-          <h2 class="panel-title panel-title--sm">${category}</h2>
-          <span class="text-secondary">${filtered.length} Questions</span>
-        </div>
-        <table class="data-table">
-          <thead>
-            <tr>
-              <th>#</th>
-              <th>Problem</th>
-              <th>Difficulty</th>
-              <th>Why It Matters</th>
-              <th>Link</th>
-            </tr>
-          </thead>
-          <tbody>
-            ${filtered.map((problem, index) => {
+        <div class="box">
+          <div class="level is-mobile">
+            <div class="level-left">
+              <div class="level-item">
+                <h2 class="title is-4 mb-0">${category}</h2>
+              </div>
+            </div>
+            <div class="level-right">
+              <div class="level-item">
+                <span class="tag is-light">${filtered.length} Questions</span>
+              </div>
+            </div>
+          </div>
+          <div class="table-container">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Problem</th>
+                  <th>Difficulty</th>
+                  <th>Why It Matters</th>
+                  <th>Link</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${filtered.map((problem, index) => {
                 const [title, difficulty, reason, url] = problem;
                 const label = url.includes('leetcode') ? 'LeetCode' : url.includes('geeksforgeeks') ? 'GeeksForGeeks' : 'Open Link';
-                const chipTone = difficulty === 'Hard' ? 'chip--danger' : difficulty === 'Medium' ? 'chip--warn' : 'chip--success';
+                const tagTone = difficulty === 'Hard' ? 'is-danger' : difficulty === 'Medium' ? 'is-warning' : 'is-success';
                 return `
                 <tr>
                   <td>${index + 1}</td>
                   <td><strong>${title}</strong></td>
-                  <td><span class="chip ${chipTone}">${difficulty}</span></td>
+                  <td><span class="tag ${tagTone} is-light">${difficulty}</span></td>
                   <td>${reason}</td>
-                  <td><a class="button" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></td>
+                  <td><a class="button is-primary is-small" href="${url}" target="_blank" rel="noopener noreferrer">${label}</a></td>
                 </tr>
               `;
-            }).join('')}
-          </tbody>
-        </table>
+                }).join('')}
+              </tbody>
+            </table>
+          </div>
+        </div>
       `;
 
             content.appendChild(section);
@@ -186,11 +198,11 @@ document.addEventListener('DOMContentLoaded', () => {
         totals.hard.textContent = hard;
     }
 
-    chips.forEach(chip => {
-        chip.addEventListener('click', () => {
-            chips.forEach(node => node.classList.remove('is-active'));
-            chip.classList.add('is-active');
-            selectedDifficulty = chip.dataset.difficulty;
+    filters.forEach(filter => {
+        filter.addEventListener('click', () => {
+            filters.forEach(node => node.classList.remove('is-selected'));
+            filter.classList.add('is-selected');
+            selectedDifficulty = filter.dataset.difficulty;
             render();
         });
     });

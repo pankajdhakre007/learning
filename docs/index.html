@@ -4,47 +4,73 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>System Design Interview Hub — Learning Docs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body class="page-home">
-  <main class="page-shell">
-    <header class="site-header">
-      <div class="brand">
-        <p class="eyebrow">Interview Preparation</p>
-        <h1 class="brand-title">System Design Interview Hub</h1>
-        <p class="brand-subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
+<body>
+  <main>
+    <section class="section">
+      <div class="container">
+        <p class="heading">Interview Preparation</p>
+        <h1 class="title">System Design Interview Hub</h1>
+        <p class="subtitle">Production failure playbooks, benchmark comparisons, algorithm drill-downs, and load reference data curated for senior engineering interviews.</p>
       </div>
-    </header>
-
-    <section class="card-grid">
-      <article class="card">
-        <h2 class="card-title">LeetCode Questions</h2>
-        <p class="card-copy">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
-        <a class="button button--lg" href="leetcode-questions.html">Open LeetCode Questions</a>
-      </article>
-
-      <article class="card">
-        <h2 class="card-title">Technology Comparison</h2>
-        <p class="card-copy">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
-        <a class="button button--lg" href="technology-comparison.html">View Comparison</a>
-      </article>
-
-      <article class="card">
-        <h2 class="card-title">Tech Issues &amp; Resolutions</h2>
-        <p class="card-copy">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
-        <a class="button button--lg" href="tech-issues.html">Browse Topics</a>
-      </article>
-
-      <article class="card">
-        <h2 class="card-title">Fulfillment Load Comparison</h2>
-        <p class="card-copy">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
-        <a class="button button--lg" href="fulfillment-load-comparison.html">View Comparison</a>
-      </article>
     </section>
 
-    <footer class="site-footer">
-      <span class="site-footer-note">Curated system design and interview preparation resources</span>
-      <span class="site-footer-meta">Last updated May 2026</span>
+    <section class="section">
+      <div class="container">
+        <div class="columns is-multiline">
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="title is-4">LeetCode Questions</h2>
+              <p class="mb-4">Curated algorithm problems by category across arrays, trees, graphs, and dynamic programming with senior-track difficulty focus.</p>
+              <a class="button is-primary is-medium" href="leetcode-questions.html">Open LeetCode Questions</a>
+            </div>
+          </div>
+
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="title is-4">Technology Comparison</h2>
+              <p class="mb-4">Reads, writes, and latency benchmarks across databases, caches, messaging, gateways, and infrastructure technologies.</p>
+              <a class="button is-primary is-medium" href="technology-comparison.html">View Comparison</a>
+            </div>
+          </div>
+
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="title is-4">Tech Issues &amp; Resolutions</h2>
+              <p class="mb-4">Twenty-eight production failure domains across Kafka, MongoDB, Redis, Elasticsearch, Kubernetes, Cassandra, and API Gateway.</p>
+              <a class="button is-primary is-medium" href="tech-issues.html">Browse Topics</a>
+            </div>
+          </div>
+
+          <div class="column is-half-desktop is-full-tablet">
+            <div class="box">
+              <h2 class="title is-4">Fulfillment Load Comparison</h2>
+              <p class="mb-4">Order volume, transaction counts, and load multipliers comparing a regular day to peak annual event demand.</p>
+              <a class="button is-primary is-medium" href="fulfillment-load-comparison.html">View Comparison</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <p>Curated system design and interview preparation resources</p>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <p>Last updated May 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   </main>
 </body>

@@ -4,15 +4,18 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kafka — Storage & Replication Pressure</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
   <link rel="stylesheet" href="../assets/css/site.css" />
 </head>
-<body class="doc-page">
-  <div class="page-inner" id="root"></div>
+<body>
+  <main class="section">
+    <div class="container" id="root"></div>
+  </main>
   <script src="../assets/js/tech-issue-renderer.js"></script>
   <script>
     // Data configuration - reusable for different topics
     const pageData = {
-      hero: {
+      header: {
         eyebrow: "Kafka — distributed systems",
         title: "Storage & replication pressure",
         description: "Staff+/Principal-level guide covering disk throughput bottlenecks, replication lag, ISR shrink, segment management pressure, and storage-bound scalability failures."

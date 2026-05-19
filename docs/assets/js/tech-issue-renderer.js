@@ -4,81 +4,84 @@ function renderTechIssuePage(pageData) {
     return;
   }
 
-  let html = `
-    <div class="panel panel--accent doc-hero">
-      <p class="label-mono label-mono--accent">${pageData.hero.eyebrow}</p>
-      <h1>${pageData.hero.title}</h1>
-      <p>${pageData.hero.description}</p>
-    </div>
+  const renderList = items => items.map(item => `<li>${item}</li>`).join('');
 
-    <div class="section">
-      <p class="label-mono">Common synonyms</p>
-      <div class="chip-grid">
-        ${pageData.synonyms.map(s => `<span class="chip chip--hover">${s}</span>`).join('')}
+  root.innerHTML = `
+    <section class="section">
+      <p class="heading">${pageData.header.eyebrow}</p>
+      <h1 class="title">${pageData.header.title}</h1>
+      <p class="subtitle">${pageData.header.description}</p>
+    </section>
+
+    <section class="section pt-0">
+      <p class="heading">Common synonyms</p>
+      <div class="tags">
+        ${pageData.synonyms.map(s => `<span class="tag is-light">${s}</span>`).join('')}
       </div>
-    </div>
+    </section>
 
-    <div class="section">
-      <p class="label-mono">How interviewers phrase this</p>
-      <div class="quote-list">
-        ${pageData.questions.map(q => `<div class="quote-item">${q}</div>`).join('')}
+    <section class="section pt-0">
+      <p class="heading">How interviewers phrase this</p>
+      <div class="content">
+        ${pageData.questions.map(q => `<blockquote>${q}</blockquote>`).join('')}
       </div>
-    </div>
+    </section>
 
-    <div class="section">
-      <p class="label-mono">Layer-by-layer breakdown</p>
-      <div class="tab-strip">
-        ${pageData.layers.map((l, i) => `<button class="tab ${i === 0 ? 'is-active' : ''}" onclick="showLayer(${i})">${l.name}</button>`).join('')}
+    <section class="section pt-0">
+      <p class="heading">Layer-by-layer breakdown</p>
+      <div class="buttons has-addons is-flex-wrap-wrap">
+        ${pageData.layers.map((layer, index) => `<button class="button is-small ${index === 0 ? 'is-selected' : ''}" data-layer-button type="button" onclick="showLayer(${index})">${layer.name}</button>`).join('')}
       </div>
 
-      ${pageData.layers.map((layer, idx) => `
-        <div class="panel tab-panel ${idx === 0 ? 'is-active' : ''}" id="layer-${idx}">
-          <p class="tab-panel-title">${layer.title}</p>
-          <p class="tab-panel-desc">${layer.description}</p>
-          <div class="duo-grid">
-            <div class="panel panel--soft">
-              <p class="label-mono label-mono--xs">Observable symptoms</p>
-              <ul class="feature-list">
-                ${layer.symptoms.map(s => `<li>${s}</li>`).join('')}
-              </ul>
+      ${pageData.layers.map((layer, index) => `
+        <div class="box ${index === 0 ? '' : 'is-hidden'}" id="layer-${index}">
+          <h2 class="title is-4">${layer.title}</h2>
+          <p class="subtitle is-6">${layer.description}</p>
+
+          <div class="columns is-multiline">
+            <div class="column is-half">
+              <article class="message is-info">
+                <div class="message-header"><p>Observable symptoms</p></div>
+                <div class="message-body"><div class="content"><ul>${renderList(layer.symptoms)}</ul></div></div>
+              </article>
             </div>
-            <div class="panel panel--soft">
-              <p class="label-mono label-mono--xs">Root causes</p>
-              <ul class="feature-list">
-                ${layer.causes.map(c => `<li>${c}</li>`).join('')}
-              </ul>
+            <div class="column is-half">
+              <article class="message is-info">
+                <div class="message-header"><p>Root causes</p></div>
+                <div class="message-body"><div class="content"><ul>${renderList(layer.causes)}</ul></div></div>
+              </article>
             </div>
-            <div class="panel panel--soft">
-              <p class="label-mono label-mono--xs">System effects</p>
-              <ul class="feature-list">
-                ${layer.effects.map(e => `<li>${e}</li>`).join('')}
-              </ul>
+            <div class="column is-half">
+              <article class="message is-info">
+                <div class="message-header"><p>System effects</p></div>
+                <div class="message-body"><div class="content"><ul>${renderList(layer.effects)}</ul></div></div>
+              </article>
             </div>
-            <div class="panel panel--soft">
-              <p class="label-mono label-mono--xs">Mitigations</p>
-              <ul class="feature-list">
-                ${layer.mitigations.map(m => `<li>${m}</li>`).join('')}
-              </ul>
+            <div class="column is-half">
+              <article class="message is-info">
+                <div class="message-header"><p>Mitigations</p></div>
+                <div class="message-body"><div class="content"><ul>${renderList(layer.mitigations)}</ul></div></div>
+              </article>
             </div>
           </div>
-          <div class="metrics-row">
-            <span class="label-mono label-mono--inline">Key metrics</span>
-            ${layer.metrics.map(m => `<span class="chip chip--primary">${m}</span>`).join('')}
+
+          <p class="heading">Key metrics</p>
+          <div class="tags">
+            ${layer.metrics.map(metric => `<span class="tag is-primary is-light">${metric}</span>`).join('')}
           </div>
-          <div class="panel panel--warn">
-            <p class="label-mono label-mono--warn">Tradeoffs</p>
-            <ul class="feature-list feature-list--warn">
-              ${layer.tradeoffs.map(t => `<li>${t}</li>`).join('')}
-            </ul>
-          </div>
+
+          <article class="message is-warning">
+            <div class="message-header"><p>Tradeoffs</p></div>
+            <div class="message-body"><div class="content"><ul>${renderList(layer.tradeoffs)}</ul></div></div>
+          </article>
         </div>
       `).join('')}
-    </div>
+    </section>
 
-    <div class="section">
-      <p class="label-mono">Universal distributed systems pattern</p>
-      <div class="panel panel--flush">
-        <table class="data-table data-table--mono-head">
+    <section class="section pt-0">
+      <p class="heading">Universal distributed systems pattern</p>
+      <div class="table-container">
+        <table class="table is-striped is-hoverable is-fullwidth">
           <thead>
             <tr>
               <th>Technology</th>
@@ -86,25 +89,26 @@ function renderTechIssuePage(pageData) {
             </tr>
           </thead>
           <tbody>
-            ${pageData.comparisons.map(c => `<tr><td class="text-strong">${c.tech}</td><td class="text-primary">${c.problem}</td></tr>`).join('')}
+            ${pageData.comparisons.map(comparison => `<tr><td><strong>${comparison.tech}</strong></td><td>${comparison.problem}</td></tr>`).join('')}
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
 
-    <div class="panel panel--quote">
-      <p>${pageData.insight}</p>
-    </div>
+    <section class="section pt-0">
+      <article class="message is-info">
+        <div class="message-body">${pageData.insight}</div>
+      </article>
+    </section>
   `;
-
-  root.innerHTML = html;
 }
 
-function showLayer(idx) {
-  document.querySelectorAll('.tab-panel').forEach((c, i) => {
-    c.classList.toggle('is-active', i === idx);
+function showLayer(index) {
+  document.querySelectorAll('[id^="layer-"]').forEach((section, sectionIndex) => {
+    section.classList.toggle('is-hidden', sectionIndex !== index);
   });
-  document.querySelectorAll('.tab').forEach((b, i) => {
-    b.classList.toggle('is-active', i === idx);
+
+  document.querySelectorAll('[data-layer-button]').forEach((button, buttonIndex) => {
+    button.classList.toggle('is-selected', buttonIndex === index);
   });
 }

@@ -4,102 +4,154 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Fulfillment Load — Regular Day vs. Annual Event — Learning Docs</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@1.0.2/css/bulma.min.css" />
+  <link rel="stylesheet" href="assets/css/theme.css" />
   <link rel="stylesheet" href="assets/css/site.css" />
 </head>
-<body class="page-fulfillment">
-  <main class="page-shell">
-    <header class="site-header">
-      <div class="brand">
-        <p class="eyebrow">Operations Reference</p>
-        <h1 class="brand-title">Fulfillment Load — Regular Day vs. Annual Event</h1>
-        <p class="brand-subtitle">Order volume, transaction counts, and event-day deltas for regular demand versus peak annual event load.</p>
-      </div>
-      <a class="button button--icon" href="index.html" aria-label="Back to home" title="Back to home">
-        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-          <path d="M15 18l-6-6 6-6" />
-        </svg>
-      </a>
-    </header>
-
-    <section class="page-content-narrow">
-      <p class="page-subtitle">
-        BF/CM = Black Friday / Cyber Monday. % change shows expected load increase on event days.
-      </p>
-
-      <div class="panel panel--flush">
-        <table class="data-table data-table--mono-head data-table--align-right">
-          <thead>
-            <tr>
-              <th>Detail</th>
-              <th>Regular Day</th>
-              <th>Annual Event (BF/CM)</th>
-              <th>Change</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td class="row-label">Total Orders in a Day</td>
-              <td class="text-secondary">4.0 Million</td>
-              <td class="text-primary">6.5 Million+</td>
-              <td><span class="chip chip--success">+63%</span></td>
-            </tr>
-            <tr>
-              <td class="row-label">Total Lines Delivered (Items)</td>
-              <td class="text-secondary">12.0 Million</td>
-              <td class="text-primary">15.0 – 18.9 Million</td>
-              <td><span class="chip chip--success">+25–58%</span></td>
-            </tr>
-            <tr>
-              <td class="row-label">Grocery Orders (Count)</td>
-              <td class="text-secondary">2.4 Million (60%)</td>
-              <td class="text-primary">2.5 Million (38%)</td>
-              <td><span class="chip chip--success">+4%</span></td>
-            </tr>
-            <tr>
-              <td class="row-label">Gen. Merchandise (GM) Orders</td>
-              <td class="text-secondary">1.6 Million (40%)</td>
-              <td class="text-primary">4.0 Million (62%)</td>
-              <td><span class="chip chip--success">+150%</span></td>
-            </tr>
-            <tr>
-              <td class="row-label">Avg. Items / Order (Grocery)</td>
-              <td class="text-secondary">4.6 Items</td>
-              <td class="text-primary">4.2 – 5.0 Items</td>
-              <td><span class="chip chip--neutral">~flat</span></td>
-            </tr>
-            <tr>
-              <td class="row-label">Avg. Items / Order (GM)</td>
-              <td class="text-secondary">0.6* (Calculated)</td>
-              <td class="text-primary">1.1 – 2.1 Items</td>
-              <td><span class="chip chip--success">+83–250%</span></td>
-            </tr>
-            <tr class="row-separator"><td colspan="4"></td></tr>
-            <tr>
-              <td class="row-label">High-Level Transactions</td>
-              <td class="text-secondary">~40 – 48 Million</td>
-              <td class="text-primary">~65 – 78 Million</td>
-              <td><span class="chip chip--success">+63%</span></td>
-            </tr>
-            <tr>
-              <td class="row-note" colspan="4">(Picking, Staging, QC, Pack, Deliver) &nbsp;·&nbsp; ~10–12 per order on both days</td>
-            </tr>
-            <tr>
-              <td class="row-label">Total Actual Transactions</td>
-              <td class="text-secondary">~160 – 240 Million</td>
-              <td class="text-primary">~390 – 450 Million</td>
-              <td><span class="chip chip--success">+90–180%</span></td>
-            </tr>
-            <tr>
-              <td class="row-note" colspan="4">(Kafka, Ingestion, Audit, Orchestration) &nbsp;·&nbsp; ~40–60 per order regular &nbsp;·&nbsp; ~60+ per order event (spike amplification)</td>
-            </tr>
-          </tbody>
-        </table>
+<body>
+  <main>
+    <section class="section">
+      <div class="container">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <div>
+                <p class="heading">Operations Reference</p>
+                <h1 class="title">Fulfillment Load - Regular Day vs. Annual Event</h1>
+                <p class="subtitle">Order volume, transaction counts, and event-day deltas for regular demand versus peak annual event load.</p>
+              </div>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <a class="button is-light" href="index.html">Back</a>
+            </div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <footer class="site-footer">
-      <span class="site-footer-note">Annual-event fulfillment load reference</span>
-      <span class="site-footer-meta">Last updated May 2026</span>
+    <section class="section">
+      <div class="container">
+        <div class="columns is-multiline mb-4">
+          <div class="column is-one-third-desktop is-full-tablet">
+            <div class="box">
+              <p class="heading">Annual Orders</p>
+              <p class="title is-3">6.5M+</p>
+              <p class="subtitle is-6">Peak event-day order volume</p>
+            </div>
+          </div>
+          <div class="column is-one-third-desktop is-full-tablet">
+            <div class="box">
+              <p class="heading">Actual Transactions</p>
+              <p class="title is-3">390-450M</p>
+              <p class="subtitle is-6">Operational event amplification</p>
+            </div>
+          </div>
+          <div class="column is-one-third-desktop is-full-tablet">
+            <div class="box">
+              <p class="heading">GM Demand Spike</p>
+              <p class="title is-3">+150%</p>
+              <p class="subtitle is-6">Merchandise order growth</p>
+            </div>
+          </div>
+        </div>
+
+        <div class="box">
+          <div class="notification is-info is-light mb-5">
+            <strong>BF/CM</strong> = Black Friday / Cyber Monday. Change values show expected load increase on event days.
+          </div>
+
+          <div class="table-container">
+            <table class="table is-striped is-hoverable is-fullwidth">
+              <thead>
+                <tr>
+                  <th>Detail</th>
+                  <th class="has-text-right">Regular Day</th>
+                  <th class="has-text-right">Annual Event (BF/CM)</th>
+                  <th class="has-text-right">Change</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><strong>Total Orders in a Day</strong></td>
+                  <td class="has-text-right has-text-grey">4.0 Million</td>
+                  <td class="has-text-right has-text-primary"><strong>6.5 Million+</strong></td>
+                  <td class="has-text-right"><span class="tag is-primary is-light">+63%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Total Lines Delivered (Items)</strong></td>
+                  <td class="has-text-right has-text-grey">12.0 Million</td>
+                  <td class="has-text-right has-text-primary"><strong>15.0 – 18.9 Million</strong></td>
+                  <td class="has-text-right"><span class="tag is-primary is-light">+25–58%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Grocery Orders (Count)</strong></td>
+                  <td class="has-text-right has-text-grey">2.4 Million (60%)</td>
+                  <td class="has-text-right has-text-primary"><strong>2.5 Million (38%)</strong></td>
+                  <td class="has-text-right"><span class="tag is-light">+4%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Gen. Merchandise (GM) Orders</strong></td>
+                  <td class="has-text-right has-text-grey">1.6 Million (40%)</td>
+                  <td class="has-text-right has-text-primary"><strong>4.0 Million (62%)</strong></td>
+                  <td class="has-text-right"><span class="tag is-warning is-light">+150%</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Avg. Items / Order (Grocery)</strong></td>
+                  <td class="has-text-right has-text-grey">4.6 Items</td>
+                  <td class="has-text-right has-text-primary"><strong>4.2 – 5.0 Items</strong></td>
+                  <td class="has-text-right"><span class="tag is-light">~flat</span></td>
+                </tr>
+                <tr>
+                  <td><strong>Avg. Items / Order (GM)</strong></td>
+                  <td class="has-text-right has-text-grey">0.6* (Calculated)</td>
+                  <td class="has-text-right has-text-primary"><strong>1.1 – 2.1 Items</strong></td>
+                  <td class="has-text-right"><span class="tag is-warning is-light">+83–250%</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="has-background-light"></td>
+                </tr>
+                <tr>
+                  <td><strong>High-Level Transactions</strong></td>
+                  <td class="has-text-right has-text-grey">~40 – 48 Million</td>
+                  <td class="has-text-right has-text-primary"><strong>~65 – 78 Million</strong></td>
+                  <td class="has-text-right"><span class="tag is-primary is-light">+63%</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="has-text-grey is-size-7">(Picking, Staging, QC, Pack, Deliver) - ~10-12 per order on both days</td>
+                </tr>
+                <tr>
+                  <td><strong>Total Actual Transactions</strong></td>
+                  <td class="has-text-right has-text-grey">~160 – 240 Million</td>
+                  <td class="has-text-right has-text-info"><strong>~390 – 450 Million</strong></td>
+                  <td class="has-text-right"><span class="tag is-success">+90–180%</span></td>
+                </tr>
+                <tr>
+                  <td colspan="4" class="has-text-grey is-size-7">(Kafka, Ingestion, Audit, Orchestration) - ~40-60 per order regular - ~60+ per order event (spike amplification)</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <div class="container">
+        <div class="level">
+          <div class="level-left">
+            <div class="level-item">
+              <p>Annual-event fulfillment load reference</p>
+            </div>
+          </div>
+          <div class="level-right">
+            <div class="level-item">
+              <p>Last updated May 2026</p>
+            </div>
+          </div>
+        </div>
+      </div>
     </footer>
   </main>
 </body>
